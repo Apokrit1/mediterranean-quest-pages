@@ -1,0 +1,2795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Mediterranean Quest — Unit 1 English Revision</title>
+<meta name="description" content="An interactive EFL revision quiz about the Mediterranean Sea, with a printable worksheet and answer key.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23ffd93d' stroke='%23172033' stroke-width='3'/%3E%3Cpath d='M5 20c3-3 5-3 8 0s5 3 8 0 5-3 8 0' fill='none' stroke='%23172033' stroke-width='3'/%3E%3C/svg%3E">
+<style>
+/* ============================================================
+   Mediterranean Quest — offline single-file app
+   Design: friendly neo-brutalism + bento panels
+   ============================================================ */
+:root{
+  --ink:#172033;
+  --ink-soft:#3b4660;
+  --paper:#fffaf0;
+  --cream:#fff3d6;
+  --white:#ffffff;
+  --coral:#ff6b6b;
+  --coral-dark:#e04b4b;
+  --sun:#ffd93d;
+  --sun-dark:#e8b900;
+  --mint:#6ee7b7;
+  --mint-dark:#20b981;
+  --sky:#7dd3fc;
+  --sky-dark:#0e91d1;
+  --violet:#c4b5fd;
+  --violet-dark:#7c5cf0;
+  --lime:#bef264;
+  --red:#ef4444;
+  --green:#0f9f6e;
+  --line:3px solid var(--ink);
+  --shadow:6px 6px 0 var(--ink);
+  --shadow-sm:3px 3px 0 var(--ink);
+  --radius:22px;
+  --radius-sm:14px;
+  --font-body:"Trebuchet MS","Segoe UI",system-ui,-apple-system,sans-serif;
+  --font-display:"Arial Black","Trebuchet MS",system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:17px;
+  line-height:1.55;
+  background:
+    radial-gradient(circle at 8% 4%, rgba(255,217,61,.42), transparent 26rem),
+    radial-gradient(circle at 92% 12%, rgba(125,211,252,.45), transparent 30rem),
+    radial-gradient(circle at 74% 92%, rgba(110,231,183,.34), transparent 26rem),
+    var(--paper);
+  background-attachment:fixed;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background-image:radial-gradient(rgba(23,32,51,.14) 1.2px, transparent 1.2px);
+  background-size:22px 22px;
+  opacity:.5;
+}
+img{max-width:100%;display:block}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed}
+a{color:inherit}
+h1,h2,h3,h4,p{margin:0}
+h1,h2,h3,h4{font-family:var(--font-display);line-height:1.12;letter-spacing:-.035em}
+:focus-visible{outline:4px solid var(--sky-dark);outline-offset:3px}
+::selection{background:var(--sun);color:var(--ink)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip-link{
+  position:fixed;left:12px;top:-80px;z-index:9999;background:var(--sun);
+  border:var(--line);border-radius:12px;padding:10px 16px;font-weight:800;
+  box-shadow:var(--shadow-sm);transition:top .15s;
+}
+.skip-link:focus{top:12px}
+.icon{width:1.1em;height:1.1em;fill:currentColor;flex:0 0 auto;vertical-align:-.15em}
+.hidden,[hidden]{display:none!important}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  border:var(--line);border-radius:999px;padding:.78rem 1.35rem;
+  background:var(--white);color:var(--ink);font-weight:900;font-size:1rem;
+  box-shadow:var(--shadow-sm);text-decoration:none;line-height:1.1;
+  transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+  min-height:48px;
+}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn:disabled{opacity:.55;transform:none;box-shadow:var(--shadow-sm);cursor:not-allowed}
+.btn.primary{background:var(--coral)}
+.btn.primary:hover{background:#ff7c7c}
+.btn.secondary{background:var(--sun)}
+.btn.mint{background:var(--mint)}
+.btn.sky{background:var(--sky)}
+.btn.ghost{background:transparent;box-shadow:none;border-color:transparent;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px;padding:.6rem .8rem}
+.btn.ghost:hover{transform:none;background:rgba(23,32,51,.06)}
+.btn.small{padding:.5rem .85rem;font-size:.9rem;min-height:40px}
+.icon-btn{
+  width:46px;height:46px;display:inline-grid;place-items:center;border:var(--line);
+  border-radius:14px;background:var(--white);box-shadow:var(--shadow-sm);
+  transition:transform .12s ease, box-shadow .12s ease;
+}
+.icon-btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
+.icon-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:80;
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  padding:12px clamp(14px,3vw,32px);
+  background:rgba(255,250,240,.88);
+  backdrop-filter:blur(10px);
+  border-bottom:var(--line);
+}
+.brand{display:flex;align-items:center;gap:12px;border:0;background:none;padding:0;text-align:left}
+.brand-mark{
+  width:52px;height:52px;border:var(--line);border-radius:16px;background:var(--sky);
+  display:grid;place-items:center;box-shadow:3px 3px 0 var(--ink);transform:rotate(-3deg);
+}
+.brand-mark svg{width:32px;height:32px}
+.brand-text b{display:block;font-size:1.08rem;letter-spacing:-.02em;line-height:1.1}
+.brand-text small{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.13em;font-weight:800;color:var(--ink-soft);margin-top:3px}
+.hud{display:flex;align-items:center;gap:10px;margin-left:auto;flex-wrap:wrap}
+.hud-chip{
+  display:inline-flex;align-items:center;gap:7px;border:2.5px solid var(--ink);
+  border-radius:999px;padding:6px 12px;background:var(--white);font-weight:900;font-size:.88rem;
+  box-shadow:2px 2px 0 var(--ink);white-space:nowrap;
+}
+.hud-chip.flame{background:var(--cream)}
+.hud-chip.timer{background:var(--mint)}
+.level-wrap{display:flex;align-items:center;gap:9px;border:2.5px solid var(--ink);border-radius:16px;background:var(--sun);padding:5px 11px;box-shadow:2px 2px 0 var(--ink)}
+.level-badge{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;font-weight:900;line-height:1}
+.level-num{font-family:var(--font-display);font-size:1.25rem;line-height:1}
+.xp-track{width:86px;height:11px;border:2px solid var(--ink);border-radius:999px;background:var(--white);overflow:hidden}
+.xp-fill{height:100%;width:0;background:var(--coral);transition:width .35s ease}
+.top-actions{display:flex;align-items:center;gap:8px;margin-left:4px}
+@media(max-width:900px){
+  .hud{order:3;width:100%;margin-left:0;justify-content:space-between;gap:6px}
+  .xp-track{width:58px}
+  .hud-chip{font-size:.8rem;padding:5px 9px}
+  .brand-text b{font-size:.98rem}
+}
+@media(max-width:520px){
+  .topbar{gap:10px;padding:9px 12px}
+  .brand-mark{width:44px;height:44px;border-radius:13px}
+  .brand-text small{letter-spacing:.08em}
+  .level-wrap{padding:4px 8px}
+  .hud-chip{padding:4px 8px;font-size:.76rem;gap:5px}
+  .top-actions{gap:5px;margin-left:auto}
+  .icon-btn{width:42px;height:42px}
+}
+
+/* ---------- layout ---------- */
+#app{min-height:100vh;display:flex;flex-direction:column}
+main{flex:1;width:100%}
+.screen{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:30px 0 56px}
+.screen[hidden]{display:none!important}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:7px;font-size:.72rem;font-weight:900;
+  text-transform:uppercase;letter-spacing:.15em;background:var(--sun);
+  border:2.5px solid var(--ink);border-radius:999px;padding:5px 11px;box-shadow:2px 2px 0 var(--ink);
+}
+.highlight{position:relative;display:inline-block;z-index:1}
+.highlight::after{
+  content:"";position:absolute;left:-2%;right:-2%;bottom:4%;height:34%;background:var(--sun);
+  z-index:-1;transform:rotate(-1.5deg);border-radius:4px;
+}
+
+/* ---------- intro ---------- */
+.intro{padding-top:38px}
+.hero{display:grid;grid-template-columns:1.06fr .94fr;gap:40px;align-items:center;margin-bottom:40px}
+.hero-copy h1{font-size:clamp(2.35rem,5vw,4.3rem);margin:18px 0 16px;letter-spacing:-.055em}
+.lede{font-size:1.12rem;max-width:34rem;color:var(--ink-soft);font-weight:600}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.hero-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.hero-meta span{font-size:.8rem;font-weight:900;background:var(--white);border:2px solid var(--ink);border-radius:999px;padding:5px 10px;box-shadow:2px 2px 0 var(--ink)}
+.hero-art{position:relative;min-height:380px;display:grid;place-items:center}
+.map-frame{
+  position:relative;width:100%;max-width:470px;border:var(--line);border-radius:26px;
+  background:var(--ink);padding:9px;box-shadow:10px 10px 0 var(--ink);transform:rotate(2deg);
+}
+.map-frame img{width:100%;height:auto;border-radius:18px;display:block;object-fit:cover}
+.map-frame::after{
+  content:"";position:absolute;inset:9px;border-radius:18px;
+  background:linear-gradient(180deg,rgba(23,32,51,0) 55%,rgba(23,32,51,.55));
+  pointer-events:none;
+}
+.map-caption{
+  position:absolute;left:20px;right:20px;bottom:20px;z-index:2;color:var(--white);
+  display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:900;
+  text-shadow:0 2px 8px rgba(0,0,0,.5);font-size:.9rem;
+}
+.map-caption span{background:rgba(23,32,51,.72);border:2px solid rgba(255,255,255,.65);padding:4px 9px;border-radius:999px;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase}
+.float-card{
+  position:absolute;z-index:3;background:var(--white);border:var(--line);border-radius:16px;
+  padding:10px 13px;box-shadow:var(--shadow-sm);font-weight:900;font-size:.82rem;
+  display:flex;align-items:center;gap:8px;line-height:1.15;
+}
+.float-card b{display:block;font-size:1.35rem;line-height:1;font-family:var(--font-display)}
+.float-card.top{top:2%;right:-3%;transform:rotate(4deg);background:var(--sun)}
+.float-card.bottom{bottom:5%;left:-4%;transform:rotate(-4deg);background:var(--mint)}
+.float-card.mid{top:42%;right:-6%;transform:rotate(-3deg);background:var(--violet)}
+@media(max-width:980px){
+  .hero{grid-template-columns:1fr;gap:26px}
+  .hero-art{min-height:330px;order:-1}
+  .map-frame{max-width:420px}
+  .float-card.top{right:4%}
+  .float-card.mid{right:0}
+  .float-card.bottom{left:3%}
+}
+@media(max-width:520px){
+  .hero-art{min-height:280px}
+  .float-card{font-size:.72rem;padding:8px 10px}
+  .float-card b{font-size:1.1rem}
+  .float-card.mid{display:none}
+  .map-caption{font-size:.78rem}
+}
+
+.bento{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px}
+.bento-card{
+  border:var(--line);border-radius:var(--radius);padding:18px;background:var(--white);
+  box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:7px;min-height:150px;
+  position:relative;overflow:hidden;
+}
+.bento-card:nth-child(1){background:var(--sun)}
+.bento-card:nth-child(2){background:var(--mint)}
+.bento-card:nth-child(3){background:var(--sky)}
+.bento-card:nth-child(4){background:var(--violet)}
+.bento-card .big-emoji{font-size:1.7rem;line-height:1}
+.bento-card h3{font-size:1rem;letter-spacing:-.02em}
+.bento-card p{font-size:.86rem;color:var(--ink-soft);font-weight:600;line-height:1.35}
+.bento-card .num{font-family:var(--font-display);font-size:1.5rem;line-height:1}
+@media(max-width:900px){.bento{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.bento{grid-template-columns:1fr 1fr;gap:10px}.bento-card{min-height:132px;padding:13px}.bento-card p{font-size:.78rem}}
+
+.teacher-tools{
+  margin-top:24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  border:3px dashed var(--ink);border-radius:var(--radius);padding:16px 18px;background:rgba(255,255,255,.55);
+}
+.teacher-tools h3{font-size:.95rem}
+.teacher-tools p{font-size:.85rem;color:var(--ink-soft);margin-top:2px}
+.teacher-tools .spacer{flex:1}
+.resume-banner{
+  margin-top:18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  border:var(--line);border-radius:16px;background:var(--cream);padding:12px 15px;box-shadow:var(--shadow-sm);
+  font-weight:800;font-size:.9rem;
+}
+.resume-banner .spacer{flex:1}
+
+/* ---------- quiz ---------- */
+.quiz{padding-top:22px}
+.quiz-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.quiz-head .left{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pill{
+  display:inline-flex;align-items:center;gap:6px;border:2px solid var(--ink);border-radius:999px;
+  padding:4px 10px;background:var(--white);font-size:.7rem;font-weight:900;text-transform:uppercase;
+  letter-spacing:.1em;box-shadow:2px 2px 0 var(--ink);
+}
+.pill.location{background:var(--sun)}
+.pill.type{background:var(--violet)}
+.scene-counter{font-weight:900;font-size:.92rem;letter-spacing:.02em;white-space:nowrap}
+.scene-counter b{font-family:var(--font-display);font-size:1.25rem;color:var(--coral-dark)}
+.progress-track{height:16px;border:var(--line);border-radius:999px;background:var(--white);overflow:hidden;box-shadow:2px 2px 0 var(--ink);margin-bottom:20px}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--mint),var(--sky));transition:width .4s ease;border-right:3px solid var(--ink)}
+.quiz-grid{display:grid;grid-template-columns:minmax(0,1.62fr) minmax(260px,.78fr);gap:20px;align-items:start}
+.question-card{
+  border:var(--line);border-radius:27px;background:var(--white);padding:clamp(18px,3vw,30px);
+  box-shadow:var(--shadow);position:relative;
+}
+.question-topline{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.points-pill{display:inline-flex;align-items:center;gap:6px;background:var(--coral);border:2px solid var(--ink);border-radius:999px;padding:4px 11px;font-size:.74rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;box-shadow:2px 2px 0 var(--ink)}
+.question-card h2{font-size:clamp(1.35rem,2.6vw,1.95rem);letter-spacing:-.035em;margin:2px 0 8px}
+.instruction{color:var(--ink-soft);font-weight:700;font-size:.95rem;margin-bottom:18px}
+.question-body{font-size:1.08rem;font-weight:600}
+.quiz-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:24px;padding-top:18px;border-top:2px dashed rgba(23,32,51,.25)}
+.quiz-actions .btn.primary{min-width:170px}
+.side-rail{display:flex;flex-direction:column;gap:14px;position:sticky;top:86px}
+.rail-card{border:var(--line);border-radius:20px;background:var(--white);padding:16px;box-shadow:var(--shadow-sm)}
+.rail-card h3{font-size:.78rem;text-transform:uppercase;letter-spacing:.14em;margin-bottom:9px}
+.rail-card.progress-card{background:var(--cream)}
+.dots{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+.dot{
+  aspect-ratio:1;border:2px solid var(--ink);border-radius:7px;background:var(--white);
+  display:grid;place-items:center;font-size:.62rem;font-weight:900;color:var(--ink-soft);
+}
+.dot.done{background:var(--mint)}
+.dot.perfect{background:var(--sun)}
+.dot.current{background:var(--coral);color:var(--white);transform:scale(1.1);box-shadow:2px 2px 0 var(--ink)}
+.dot.locked{opacity:.45}
+.progress-legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;font-size:.65rem;font-weight:800;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em}
+.progress-legend i{display:inline-block;width:9px;height:9px;border:1.5px solid var(--ink);border-radius:3px;margin-right:3px;vertical-align:-1px}
+.notes-card{background:var(--sky)}
+.notes-card p{font-size:.9rem;font-weight:700;color:var(--ink)}
+.notes-card .why{margin-top:10px;padding-top:10px;border-top:2px dashed rgba(23,32,51,.3);font-size:.84rem;font-weight:600}
+.hint-btn{margin-top:12px}
+.mini-badges-card{background:var(--violet)}
+.mini-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;min-height:34px}
+.mini-badge{width:34px;height:34px;border:2px solid var(--ink);border-radius:50%;background:var(--white);display:grid;place-items:center;font-size:1rem;box-shadow:2px 2px 0 var(--ink)}
+.mini-badge.locked{opacity:.28;filter:grayscale(1)}
+@media(max-width:940px){
+  .quiz-grid{grid-template-columns:1fr}
+  .side-rail{position:static;display:grid;grid-template-columns:1fr 1fr;align-items:start}
+  .side-rail .rail-card:first-child{grid-column:1/-1}
+  .dots{grid-template-columns:repeat(16,1fr)}
+}
+@media(max-width:560px){
+  .side-rail{grid-template-columns:1fr}
+  .dots{grid-template-columns:repeat(8,1fr)}
+  .quiz-actions .btn.primary{width:100%}
+  .quiz-actions .btn.secondary{width:100%}
+}
+
+
+/* ---------- true / false ---------- */
+.tf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+.tf-btn{
+  border:var(--line);border-radius:20px;background:var(--white);padding:22px 16px;
+  font-family:var(--font-display);font-size:1.4rem;letter-spacing:-.03em;
+  box-shadow:var(--shadow-sm);transition:transform .12s,box-shadow .12s,background .12s;
+  display:flex;align-items:center;justify-content:center;gap:10px;min-height:88px;
+}
+.tf-btn:hover:not(:disabled){transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink);background:var(--cream)}
+.tf-btn[aria-pressed="true"]{background:var(--sky);box-shadow:inset 0 0 0 3px var(--ink),3px 3px 0 var(--ink)}
+.tf-btn.selected{background:var(--sky);box-shadow:inset 0 0 0 3px var(--ink),3px 3px 0 var(--ink)}
+.tf-btn.correct{background:var(--mint)!important;box-shadow:inset 0 0 0 3px var(--green),3px 3px 0 var(--ink)}
+.tf-btn.wrong{background:#ffc9c9!important;box-shadow:inset 0 0 0 3px var(--red),3px 3px 0 var(--ink)}
+.tf-btn:disabled{opacity:.85}
+.tf-btn .mark{font-size:1.3rem}
+@media(max-width:520px){.tf-grid{grid-template-columns:1fr}.tf-btn{min-height:68px;font-size:1.2rem}}
+
+/* ---------- fill in blanks ---------- */
+.fill-text{font-size:1.12rem;line-height:2.25;font-weight:600}
+.fill-text br{content:"";display:block;margin-bottom:7px}
+.blank-input{
+  display:inline-block;width:9.2ch;min-width:120px;max-width:22ch;
+  border:0;border-bottom:3px solid var(--ink);background:var(--cream);
+  padding:2px 7px 3px;font-weight:900;font-size:1rem;border-radius:6px 6px 0 0;
+  text-align:center;color:var(--ink);transition:background .15s,border-color .15s;
+}
+.blank-input:hover{background:#ffe9a8}
+.blank-input:focus{background:var(--white);outline:3px solid var(--sky-dark);outline-offset:2px;border-color:var(--sky-dark)}
+.blank-input.correct{background:#c9f7df;border-color:var(--green)}
+.blank-input.wrong{background:#ffd0d0;border-color:var(--red)}
+.blank-input:disabled{opacity:1;color:var(--ink)}
+.blank-wrap{display:inline-block;position:relative;margin:0 2px}
+.inline-fix{display:inline-flex;align-items:center;gap:2px;font-size:.72rem;font-weight:900;color:var(--green);margin-left:2px;white-space:nowrap}
+.inline-fix.bad{color:var(--red)}
+.fill-note{display:flex;gap:6px;align-items:center;font-size:.78rem;font-weight:800;color:var(--ink-soft);margin-top:12px}
+@media(max-width:520px){.fill-text{font-size:1rem;line-height:2.35}.blank-input{min-width:100px;width:8ch}}
+
+/* ---------- short answer / word order ---------- */
+.word-bank{
+  display:flex;flex-wrap:wrap;gap:8px;border:2.5px dashed var(--ink);border-radius:16px;
+  padding:12px;background:var(--cream);margin-top:14px;min-height:58px;align-items:center;
+}
+.word-bank-label{width:100%;font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft);margin-bottom:-2px}
+.word-chip{
+  border:2.5px solid var(--ink);border-radius:999px;background:var(--white);
+  padding:5px 12px;font-weight:900;font-size:.95rem;box-shadow:2px 2px 0 var(--ink);
+  transition:transform .1s,box-shadow .1s,background .1s;
+}
+.word-chip:hover{transform:translate(-1px,-2px);box-shadow:3px 4px 0 var(--ink);background:var(--sun)}
+.word-chip:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--ink)}
+.word-chip.used{opacity:.35;text-decoration:line-through;pointer-events:none}
+.answer-line{
+  display:flex;align-items:center;gap:10px;margin-top:18px;flex-wrap:wrap;
+}
+.answer-line label{font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft)}
+.short-input{
+  flex:1;min-width:220px;border:3px solid var(--ink);border-radius:14px;background:var(--white);
+  padding:13px 15px;font-weight:800;font-size:1.05rem;box-shadow:inset 2px 2px 0 rgba(23,32,51,.08);
+}
+.short-input:focus{outline:4px solid var(--sky);outline-offset:1px}
+.short-input.correct{border-color:var(--green);background:#e3fbf1}
+.short-input.wrong{border-color:var(--red);background:#ffe8e8}
+.short-tools{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.scrambled{
+  display:inline-flex;align-items:center;gap:7px;background:var(--sun);border:2px solid var(--ink);
+  border-radius:10px;padding:5px 11px;font-weight:900;font-size:.9rem;box-shadow:2px 2px 0 var(--ink);margin-bottom:4px;
+}
+
+/* ---------- matching ---------- */
+.match-layout{display:grid;grid-template-columns:1fr 1.15fr;gap:18px;align-items:start}
+.match-column h3,.map-side h3{font-size:.72rem;text-transform:uppercase;letter-spacing:.13em;margin-bottom:9px;color:var(--ink-soft)}
+.match-labels{display:flex;flex-wrap:wrap;gap:8px}
+.match-label{
+  border:2.5px solid var(--ink);border-radius:999px;background:var(--white);
+  padding:7px 13px;font-weight:900;font-size:.88rem;box-shadow:2px 2px 0 var(--ink);
+  transition:transform .1s,box-shadow .1s,background .1s;
+}
+.match-label:hover{transform:translate(-1px,-2px);box-shadow:3px 4px 0 var(--ink)}
+.match-label[aria-pressed="true"]{background:var(--sun);box-shadow:inset 0 0 0 2px var(--ink),2px 2px 0 var(--ink);transform:scale(1.04)}
+.match-label.used{opacity:.38}
+.match-label.correct{background:var(--mint)}
+.match-label.wrong{background:#ffc9c9}
+.match-targets{display:flex;flex-direction:column;gap:8px}
+.match-target{
+  display:flex;align-items:center;gap:9px;width:100%;text-align:left;
+  border:2.5px solid var(--ink);border-radius:12px;background:var(--white);
+  padding:8px 10px;font-weight:700;font-size:.85rem;line-height:1.25;box-shadow:2px 2px 0 var(--ink);
+  transition:background .12s,transform .1s;
+}
+.match-target:hover:not(:disabled){background:var(--cream);transform:translateX(2px)}
+.match-target .slot{
+  width:28px;height:28px;flex:0 0 auto;border:2px solid var(--ink);border-radius:7px;
+  display:grid;place-items:center;font-size:.62rem;font-weight:900;background:var(--cream);
+}
+.match-target .slot.filled{background:var(--sky);font-size:.7rem;padding:1px;text-align:center;overflow:hidden}
+.match-target.correct{background:#dcfce7;box-shadow:inset 0 0 0 2px var(--green),2px 2px 0 var(--ink)}
+.match-target.wrong{background:#ffe4e4;box-shadow:inset 0 0 0 2px var(--red),2px 2px 0 var(--ink)}
+.match-target:disabled{opacity:1;color:var(--ink)}
+.match-target .assign{display:block;font-weight:900;color:var(--sky-dark);font-size:.78rem;line-height:1.15;margin-bottom:1px}
+.match-target .desc{display:block;color:var(--ink-soft);font-size:.8rem}
+.match-target .target-text{flex:1}
+.match-target .clear{font-size:.72rem;font-weight:900;color:var(--red);border:0;background:none;padding:3px}
+.match-help{font-size:.78rem;font-weight:700;color:var(--ink-soft);margin-top:8px}
+@media(max-width:700px){.match-layout{grid-template-columns:1fr}.match-target{font-size:.82rem}}
+
+/* ---------- map matching ---------- */
+.map-layout{display:grid;grid-template-columns:minmax(180px,.7fr) 1.3fr;gap:18px;align-items:start}
+.map-side .match-labels{flex-direction:column;align-items:flex-start}
+.map-side .match-label{width:100%;justify-content:flex-start;border-radius:12px;text-align:left}
+.map-side .match-label::before{content:"⠿";margin-right:7px;opacity:.55;font-size:.9rem}
+.map-side .match-label .drag-hint{margin-left:auto;font-size:.62rem;opacity:.55;font-weight:800}
+.map-shell{
+  position:relative;border:3px solid var(--ink);border-radius:18px;overflow:hidden;
+  background:var(--sky);box-shadow:var(--shadow-sm);aspect-ratio:600/439;
+}
+.map-shell>img{width:100%;height:100%;object-fit:cover;filter:saturate(1.02)}
+.map-shell::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(23,32,51,.06),rgba(23,32,51,0) 30%,rgba(23,32,51,.12));
+}
+.map-zone{
+  position:absolute;transform:translate(-50%,-50%);z-index:2;
+  width:38px;height:38px;border:3px solid var(--ink);border-radius:50%;
+  background:var(--sun);color:var(--ink);font-size:.72rem;font-weight:900;
+  box-shadow:2px 2px 0 var(--ink);display:grid;place-items:center;
+  transition:transform .12s,background .12s,box-shadow .12s;
+}
+.map-zone:hover{transform:translate(-50%,-50%) scale(1.14);box-shadow:3px 4px 0 var(--ink);z-index:5}
+.map-zone.filled{width:auto;min-width:56px;max-width:124px;height:auto;min-height:34px;border-radius:999px;padding:4px 8px;background:var(--white);font-size:.62rem;line-height:1.1;text-align:center}
+.map-zone.correct{background:var(--mint);box-shadow:inset 0 0 0 2px var(--green),2px 2px 0 var(--ink)}
+.map-zone.wrong{background:#ffc9c9;box-shadow:inset 0 0 0 2px var(--red),2px 2px 0 var(--ink)}
+.map-zone.pulse{animation:pulse 1s ease infinite}
+.map-zone:disabled{opacity:1}
+.map-compass{
+  position:absolute;top:9px;right:9px;z-index:3;width:32px;height:32px;border:2px solid var(--ink);
+  border-radius:50%;background:rgba(255,255,255,.85);display:grid;place-items:center;font-weight:900;font-size:.64rem;
+  box-shadow:2px 2px 0 var(--ink);
+}
+.map-legend{
+  position:absolute;left:9px;bottom:9px;z-index:3;background:rgba(255,250,240,.92);
+  border:2px solid var(--ink);border-radius:8px;padding:3px 7px;font-size:.62rem;font-weight:900;letter-spacing:.04em;
+}
+.map-answer-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.map-answer-list span{font-size:.72rem;font-weight:800;background:var(--cream);border:1.5px solid var(--ink);border-radius:6px;padding:2px 6px}
+@media(max-width:820px){.map-layout{grid-template-columns:1fr}.map-side .match-labels{flex-direction:row}.map-side .match-label{width:auto}}
+@media(max-width:520px){.map-zone{width:32px;height:32px;font-size:.62rem}.map-zone.filled{min-width:44px;max-width:92px;font-size:.54rem}}
+
+/* ---------- dialogue ---------- */
+.dialogue{border:3px solid var(--ink);border-radius:18px;background:var(--cream);padding:14px;display:flex;flex-direction:column;gap:13px;margin-top:8px}
+.dialogue-line{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.speaker{
+  flex:0 0 auto;background:var(--violet);border:2px solid var(--ink);border-radius:999px;
+  padding:3px 10px;font-weight:900;font-size:.74rem;text-transform:uppercase;letter-spacing:.07em;
+  box-shadow:2px 2px 0 var(--ink);
+}
+.speaker.petros{background:var(--mint)}
+.dialogue-bubble{flex:1;min-width:200px;font-size:1.06rem;font-weight:700;line-height:1.9}
+.choice-group{display:inline-flex;gap:5px;vertical-align:middle;margin:0 3px}
+.choice-btn{
+  border:2.5px solid var(--ink);border-radius:10px;background:var(--white);padding:2px 9px;
+  font-weight:900;font-size:.94rem;box-shadow:2px 2px 0 var(--ink);transition:background .12s,transform .1s;
+}
+.choice-btn:hover:not(:disabled){background:var(--sun);transform:translateY(-1px)}
+.choice-btn[aria-pressed="true"]{background:var(--sky);box-shadow:inset 0 0 0 2px var(--ink),2px 2px 0 var(--ink)}
+.choice-btn.correct{background:var(--mint);box-shadow:inset 0 0 0 2px var(--green),2px 2px 0 var(--ink)}
+.choice-btn.wrong{background:#ffc9c9;box-shadow:inset 0 0 0 2px var(--red),2px 2px 0 var(--ink)}
+.choice-btn:disabled{opacity:1}
+.points-note{font-size:.72rem;font-weight:900;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.08em;margin-top:8px}
+
+/* ---------- listening ---------- */
+.audio-card{
+  border:3px solid var(--ink);border-radius:18px;background:var(--ink);color:var(--white);
+  padding:14px;margin-bottom:18px;box-shadow:var(--shadow-sm);
+}
+.audio-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.play-btn{
+  width:54px;height:54px;flex:0 0 auto;border:3px solid var(--white);border-radius:50%;
+  background:var(--sun);color:var(--ink);display:grid;place-items:center;font-size:1.25rem;
+  box-shadow:3px 3px 0 rgba(255,255,255,.35);transition:transform .1s,background .12s;
+}
+.play-btn:hover:not(:disabled){transform:scale(1.06);background:#ffe56b}
+.play-btn:disabled{opacity:.45}
+.audio-title{font-weight:900;font-size:.95rem;line-height:1.2}
+.audio-sub{font-size:.72rem;color:#cbd5e1;font-weight:700;letter-spacing:.03em}
+.audio-time{margin-left:auto;font-weight:900;font-size:.8rem;font-variant-numeric:tabular-nums;background:rgba(255,255,255,.13);padding:4px 9px;border-radius:999px}
+.seek-row{display:flex;align-items:center;gap:10px;margin-top:12px}
+.seek-row input[type="range"]{flex:1;accent-color:var(--sun);height:26px;cursor:pointer}
+.seek-row input[type="range"]:disabled{cursor:not-allowed;opacity:.5}
+.plays-left{font-size:.72rem;font-weight:900;background:var(--white);color:var(--ink);border-radius:999px;padding:3px 8px;white-space:nowrap}
+.audio-status{font-size:.76rem;font-weight:700;color:#cbd5e1;margin-top:6px;min-height:1.2em}
+.audio-note{font-size:.78rem;font-weight:700;color:var(--ink-soft);margin-top:10px;display:flex;align-items:center;gap:6px}
+.transcript{
+  margin-top:14px;border:2px dashed rgba(255,255,255,.45);border-radius:12px;padding:10px 12px;
+  font-size:.88rem;line-height:1.5;background:rgba(255,255,255,.06);
+}
+.transcript summary{cursor:pointer;font-weight:900;font-size:.8rem;letter-spacing:.04em}
+@media(max-width:520px){.audio-time{order:3;margin-left:0}.audio-title{font-size:.86rem}.play-btn{width:48px;height:48px}}
+
+/* ---------- feedback ---------- */
+.feedback{margin-top:20px;border:3px solid var(--ink);border-radius:18px;padding:15px 16px;background:var(--cream);box-shadow:var(--shadow-sm);animation:pop .25s ease}
+.feedback.perfect{background:#dcfce7}
+.feedback.partial{background:var(--cream)}
+.feedback.zero{background:#ffe4e4}
+.feedback-head{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:7px}
+.feedback-head h3{font-size:1.08rem;letter-spacing:-.02em}
+.feedback .xp-badge{margin-left:auto;background:var(--sun);border:2px solid var(--ink);border-radius:999px;padding:2px 9px;font-size:.72rem;font-weight:900;box-shadow:2px 2px 0 var(--ink)}
+.feedback p{font-size:.92rem;font-weight:700}
+.feedback .answer-list{list-style:none;padding:0;margin:9px 0 0;display:flex;flex-direction:column;gap:5px;font-size:.85rem}
+.feedback .answer-list li{display:flex;gap:7px;align-items:flex-start;background:rgba(255,255,255,.65);border-radius:8px;padding:5px 8px;line-height:1.35}
+.feedback .answer-list .ok{color:var(--green);font-weight:900}
+.feedback .answer-list .no{color:var(--red);font-weight:900}
+.feedback .explain{margin-top:10px;padding-top:9px;border-top:2px dashed rgba(23,32,51,.25);font-size:.84rem;font-weight:600;color:var(--ink-soft)}
+.feedback .explain b{color:var(--ink)}
+.feedback details{margin-top:8px;font-size:.84rem}
+.feedback details summary{cursor:pointer;font-weight:900}
+@keyframes pop{0%{transform:scale(.985);opacity:.6}100%{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{box-shadow:2px 2px 0 var(--ink),0 0 0 0 rgba(255,217,61,.8)}50%{box-shadow:2px 2px 0 var(--ink),0 0 0 9px rgba(255,217,61,0)}}
+
+/* ---------- results ---------- */
+.results{padding-top:34px}
+.result-hero{
+  border:var(--line);border-radius:30px;background:var(--white);box-shadow:var(--shadow);
+  padding:clamp(20px,4vw,42px);display:grid;grid-template-columns:1fr auto;gap:30px;align-items:center;
+  position:relative;overflow:hidden;
+}
+.result-hero::before{content:"";position:absolute;right:-70px;top:-90px;width:260px;height:260px;border-radius:50%;background:rgba(255,217,61,.4);pointer-events:none}
+.result-hero::after{content:"";position:absolute;left:-60px;bottom:-100px;width:220px;height:220px;border-radius:50%;background:rgba(125,211,252,.35);pointer-events:none}
+.result-copy{position:relative;z-index:1}
+.result-copy h1{font-size:clamp(2rem,4vw,3.1rem);margin:12px 0 8px}
+.result-copy p{color:var(--ink-soft);font-weight:700;max-width:36rem}
+.result-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.score-ring{
+  --pct:0;width:210px;height:210px;border-radius:50%;position:relative;z-index:1;
+  background:conic-gradient(var(--sun) calc(var(--pct)*1%),#e9e2d3 0);
+  border:var(--line);box-shadow:var(--shadow);display:grid;place-items:center;flex:0 0 auto;
+}
+.score-ring::before{content:"";position:absolute;inset:17px;border-radius:50%;background:var(--white);border:3px solid var(--ink)}
+.score-inner{position:relative;z-index:1;text-align:center}
+.score-inner .score{font-family:var(--font-display);font-size:2.55rem;line-height:1;letter-spacing:-.06em}
+.score-inner .outof{font-size:.78rem;font-weight:900;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft);margin-top:4px}
+.score-inner .pct{font-size:.98rem;font-weight:900;background:var(--mint);border:2px solid var(--ink);border-radius:999px;padding:1px 8px;display:inline-block;margin-top:7px}
+.result-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:22px}
+.stat{border:2.5px solid var(--ink);border-radius:14px;padding:10px 11px;background:var(--cream);box-shadow:2px 2px 0 var(--ink)}
+.stat b{display:block;font-family:var(--font-display);font-size:1.3rem;line-height:1.1}
+.stat span{font-size:.65rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft)}
+.stat:nth-child(2){background:var(--sun)}
+.stat:nth-child(3){background:var(--mint)}
+.stat:nth-child(4){background:var(--sky)}
+.best-note{margin-top:12px;font-size:.82rem;font-weight:800;color:var(--ink-soft)}
+@media(max-width:800px){
+  .result-hero{grid-template-columns:1fr;text-align:left}
+  .score-ring{width:170px;height:170px;justify-self:center}
+  .result-stats{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:480px){.result-stats{grid-template-columns:1fr 1fr}.score-ring{width:150px;height:150px}.score-inner .score{font-size:2rem}}
+
+.section-title{display:flex;align-items:center;gap:10px;margin:32px 0 14px;flex-wrap:wrap}
+.section-title h2{font-size:1.45rem}
+.section-title .line{flex:1;height:3px;background:var(--ink);border-radius:2px;min-width:30px}
+.badges-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.badge-card{
+  border:var(--line);border-radius:16px;background:var(--white);padding:12px 9px;text-align:center;
+  box-shadow:var(--shadow-sm);min-height:130px;display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.badge-card .icon-circle{width:44px;height:44px;border:2.5px solid var(--ink);border-radius:50%;background:var(--sun);display:grid;place-items:center;font-size:1.35rem;box-shadow:2px 2px 0 var(--ink)}
+.badge-card b{font-size:.78rem;line-height:1.15;letter-spacing:-.01em}
+.badge-card small{font-size:.65rem;color:var(--ink-soft);line-height:1.25;font-weight:700}
+.badge-card.locked{background:#f1eee6;opacity:.65;box-shadow:none}
+.badge-card.locked .icon-circle{background:#d8d3c7;filter:grayscale(1)}
+.badge-card.earned{animation:badgePop .4s ease}
+@keyframes badgePop{0%{transform:scale(.85) rotate(-4deg)}70%{transform:scale(1.04) rotate(2deg)}100%{transform:scale(1) rotate(0)}}
+@media(max-width:900px){.badges-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.badges-grid{grid-template-columns:repeat(2,1fr)}}
+
+.review-list{display:flex;flex-direction:column;gap:8px}
+.review-row{border:2.5px solid var(--ink);border-radius:14px;background:var(--white);box-shadow:2px 2px 0 var(--ink);overflow:hidden}
+.review-row summary{cursor:pointer;padding:10px 13px;display:flex;align-items:center;gap:10px;font-weight:800;font-size:.88rem;list-style:none}
+.review-row summary::-webkit-details-marker{display:none}
+.review-row summary .num{width:29px;height:29px;flex:0 0 auto;border:2px solid var(--ink);border-radius:8px;display:grid;place-items:center;font-size:.7rem;background:var(--cream)}
+.review-row.perfect summary .num{background:var(--mint)}
+.review-row.zero summary .num{background:#ffc9c9}
+.review-row summary .where{color:var(--ink-soft);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;font-weight:900}
+.review-row summary .review-score{margin-left:auto;font-weight:900;white-space:nowrap;font-size:.82rem}
+.review-body{padding:0 13px 12px;font-size:.82rem;font-weight:600;color:var(--ink-soft);border-top:2px dashed rgba(23,32,51,.2)}
+.review-body p{margin-top:8px}
+.review-body ul{margin:6px 0 0;padding-left:18px}
+@media(max-width:560px){.review-row summary{font-size:.8rem}.review-row summary .where{display:none}}
+
+/* ---------- toast + confetti ---------- */
+#toastHost{position:fixed;right:18px;bottom:18px;z-index:200;display:flex;flex-direction:column;gap:9px;pointer-events:none;max-width:320px}
+.toast{
+  border:var(--line);border-radius:14px;background:var(--sun);padding:10px 13px;
+  box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:9px;font-weight:900;font-size:.84rem;
+  animation:toastIn .28s ease;pointer-events:auto;
+}
+.toast .t-icon{font-size:1.3rem;line-height:1}
+.toast small{display:block;font-size:.68rem;font-weight:700;color:var(--ink-soft);line-height:1.25}
+.toast.out{animation:toastOut .25s ease forwards}
+@keyframes toastIn{from{transform:translateY(14px) scale(.96);opacity:0}to{transform:none;opacity:1}}
+@keyframes toastOut{to{transform:translateY(8px);opacity:0}}
+#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:190}
+@media(max-width:520px){#toastHost{left:12px;right:12px;bottom:12px;max-width:none}}
+
+/* ---------- footer ---------- */
+.site-footer{
+  width:min(1180px,calc(100% - 32px));margin:0 auto;padding:18px 0 26px;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:.74rem;font-weight:700;color:var(--ink-soft);
+  border-top:2px dashed rgba(23,32,51,.25);
+}
+.site-footer .spacer{flex:1}
+.link-btn{border:0;background:none;padding:2px;font-size:.74rem;font-weight:900;text-decoration:underline;text-underline-offset:3px;color:var(--ink)}
+
+/* ---------- print root ---------- */
+#printRoot{display:none}
+body.print-standalone #app{display:none}
+body.print-standalone #printRoot{display:block;background:#fff;padding:0}
+.print-page{width:100%;max-width:190mm;margin:0 auto;padding:8mm 0;color:#111;font-family:"Trebuchet MS",Arial,sans-serif;font-size:10.5pt;line-height:1.4}
+.print-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8mm;border-bottom:3px solid #111;padding-bottom:4mm;margin-bottom:5mm}
+.print-head h1{font-size:19pt;line-height:1.05;letter-spacing:-.02em;margin:0}
+.print-head p{font-size:9pt;color:#444;margin-top:2mm;font-weight:700}
+.print-badge{border:2px solid #111;border-radius:999px;padding:1mm 3mm;font-size:8pt;font-weight:900;white-space:nowrap}
+.name-line{display:flex;gap:6mm;margin:3mm 0 5mm;font-size:9pt;font-weight:800}
+.name-line span{flex:1;border-bottom:1.5px solid #111;padding-bottom:1mm}
+.print-note{border:2px solid #111;border-radius:3mm;padding:3mm 4mm;background:#f6f1e5;font-size:9pt;margin-bottom:5mm}
+.print-note b{font-weight:900}
+.print-scene{border:1.5px solid #111;border-radius:2.5mm;padding:3mm 4mm;margin-bottom:3.5mm;break-inside:avoid;page-break-inside:avoid}
+.print-scene h2{font-size:10.5pt;line-height:1.2;margin:0 0 1.5mm;letter-spacing:-.01em}
+.print-meta{display:flex;justify-content:space-between;gap:4mm;font-size:7.5pt;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:#555;margin-bottom:2mm}
+.print-q{font-size:10pt;font-weight:700;margin:1.5mm 0}
+.print-q .num{font-weight:900}
+.print-tf{display:flex;gap:8mm;font-weight:800;font-size:10pt;margin:2mm 0}
+.print-tf span{border:1.5px solid #111;border-radius:50%;width:5mm;height:5mm;display:inline-block;vertical-align:-1mm;margin-right:1.5mm}
+.print-blank{display:inline-block;min-width:22mm;border-bottom:1.4px solid #111;height:4.2mm;margin:0 1mm;vertical-align:-1mm}
+.print-lines{margin-top:2mm}
+.print-line{border-bottom:1.2px solid #999;height:7mm}
+.print-maplayout{display:grid;grid-template-columns:1.25fr .75fr;gap:5mm;align-items:start}
+.print-map{position:relative;border:1.5px solid #111;border-radius:2mm;overflow:hidden;aspect-ratio:600/439}
+.print-map img{width:100%;height:100%;object-fit:cover}
+.print-pin{
+  position:absolute;transform:translate(-50%,-50%);width:6mm;height:6mm;border:1.5px solid #111;
+  border-radius:50%;background:#ffe45c;display:grid;place-items:center;font-size:7pt;font-weight:900;
+}
+.print-match-list{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:1.2mm 3mm;font-size:9pt}
+.print-match-list li{font-weight:700}
+.print-match-list .letter{font-weight:900;color:#555;margin-right:1.5mm}
+.print-map-questions{font-size:9pt}
+.print-map-questions ol{margin:0;padding-left:5mm}
+.print-map-questions li{margin-bottom:1.6mm;font-weight:700}
+.print-dialogue{font-size:9.5pt;font-weight:700;margin:1.5mm 0}
+.print-dialogue b{font-weight:900}
+.print-key{border-top:3px solid #111;margin-top:6mm;padding-top:4mm;break-before:page;page-break-before:always}
+.print-key h1{font-size:18pt;margin:0 0 2mm}
+.print-key-scene{border-bottom:1px solid #bbb;padding:1.8mm 0;break-inside:avoid;font-size:9pt}
+.print-key-scene b{font-size:9pt}
+.print-key-scene p{margin:.8mm 0;color:#222}
+.print-key-scene .pts{float:right;font-weight:900}
+.print-key-answers{display:grid;grid-template-columns:1fr 1fr;gap:0 6mm}
+.print-transcript{border:1.5px solid #111;border-radius:2mm;padding:2.5mm 3mm;background:#f6f1e5;font-size:8.5pt;margin-top:2mm}
+.print-footer{margin-top:5mm;padding-top:2mm;border-top:1px solid #111;font-size:7.5pt;color:#555;display:flex;justify-content:space-between}
+
+/* ---------- print media ---------- */
+@media print{
+  @page{size:A4;margin:13mm}
+  html,body{background:#fff!important}
+  body{font-size:10.5pt}
+  body::before{display:none!important}
+  #app,.skip-link,#toastHost,#confetti{display:none!important}
+  #printRoot{display:block!important;padding:0;background:#fff}
+  .print-page{max-width:none;width:100%;padding:0}
+  .print-scene{box-shadow:none}
+  .print-key{break-before:page;page-break-before:always}
+  a{text-decoration:none;color:#111}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
+
+
+/* print helpers added after the main sheet */
+.print-key.print-key-only{break-before:auto;page-break-before:auto;border-top:0;margin-top:0;padding-top:0}
+.print-letter{display:inline-block;width:7mm;border-bottom:1.2px solid #111;margin-right:2mm;text-align:center;font-weight:900}
+.print-opt{font-weight:900;text-decoration:underline;text-underline-offset:2px}
+.print-answer{font-weight:900;text-decoration:underline;text-underline-offset:2px;padding:0 1mm}
+.print-dialogue .print-speaker{display:inline-block;min-width:17mm;font-weight:900}
+.print-small{font-size:8pt;color:#444;font-weight:700}
+.print-key-scene .print-key-line{margin:.7mm 0}
+.print-key-scene .print-key-line b{display:inline-block;min-width:7mm}
+.print-toolbar{display:flex;gap:8px;align-items:center;padding:8px 12px;border-bottom:2px solid #111;font:800 10pt "Trebuchet MS",Arial,sans-serif;background:#f6f1e5}
+.print-toolbar .spacer{flex:1}
+.print-toolbar button{border:1.5px solid #111;background:#fff;border-radius:999px;padding:5px 12px;font:800 9pt "Trebuchet MS",Arial,sans-serif;cursor:pointer}
+@media print{.print-toolbar{display:none!important}}
+
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<div id="app">
+  <header class="topbar" id="topbar">
+    <button class="brand" id="brandBtn" type="button" aria-label="Mediterranean Quest — go to start">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40" role="img" aria-hidden="true">
+          <circle cx="20" cy="20" r="18" fill="#ffd93d" stroke="#172033" stroke-width="3"/>
+          <path d="M8 23c3-4 6-4 9 0s6 4 9 0 6-4 9 0" fill="none" stroke="#172033" stroke-width="3" stroke-linecap="round"/>
+          <path d="M8 29c3-4 6-4 9 0s6 4 9 0 6-4 9 0" fill="none" stroke="#172033" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="25" cy="13" r="4" fill="#ff6b6b" stroke="#172033" stroke-width="2.5"/>
+        </svg>
+      </span>
+      <span class="brand-text"><b>Mediterranean Quest</b><small>Unit 1 · EFL revision</small></span>
+    </button>
+    <div class="hud" id="hud" hidden>
+      <div class="level-wrap" title="Your level">
+        <span class="level-badge">LVL</span>
+        <span class="level-num" id="levelValue">1</span>
+        <span class="xp-track" aria-hidden="true"><span class="xp-fill" id="xpFill"></span></span>
+        <span class="sr-only" id="xpText">0 XP</span>
+      </div>
+      <div class="hud-chip flame" title="Perfect-scene streak"><span aria-hidden="true">🔥</span> <span id="streakValue">0</span></div>
+      <div class="hud-chip timer" title="Time on task"><span aria-hidden="true">⏱</span> <span id="timerValue">00:00</span></div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" id="printTopBtn" type="button" title="Print student worksheet" aria-label="Print student worksheet">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V3h12v6H6zm-3 2h18a1 1 0 0 1 1 1v7h-4v4H6v-4H2v-7a1 1 0 0 1 1-1zm5 8h8v-6H8v6zm10-9a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>
+      </button>
+      <button class="icon-btn" id="resetTopBtn" type="button" title="Reset saved progress" aria-label="Reset saved progress">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5a7 7 0 1 1-6.6 9.3l2-.7A5 5 0 1 0 12 7v3L7.5 5.5 12 1v4z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ================= INTRO ================= -->
+    <section class="screen intro" id="screenIntro" aria-labelledby="introTitle">
+      <div class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">🌊 EFL · Grade 6 · Revision</span>
+          <h1 id="introTitle">Sail the <span class="highlight">Mediterranean</span>.<br>Master your English.</h1>
+          <p class="lede">Sixteen quick scenes. One sea of stories. Practise geography vocabulary, the present tenses, word order and listening — then collect badges as you go.</p>
+          <div class="hero-actions">
+            <button class="btn primary" id="startBtn" type="button">Start the voyage <span aria-hidden="true">→</span></button>
+            <button class="btn secondary hidden" id="resumeBtn" type="button">Continue</button>
+          </div>
+          <div class="hero-meta" aria-label="Quiz facts">
+            <span>🗺️ 16 scenes</span>
+            <span>⭐ 55 points</span>
+            <span>🎧 3 listens</span>
+            <span>🏅 10 badges</span>
+          </div>
+          <div class="resume-banner hidden" id="resumeBanner"></div>
+        </div>
+        <div class="hero-art">
+          <div class="map-frame">
+            <img src="mediterranean-sea-map.jpg" width="600" height="439" alt="Map of the Mediterranean Sea region">
+            <div class="map-caption"><strong>Mare Nostrum</strong><span>Unit 1 map lab</span></div>
+          </div>
+          <div class="float-card top"><span aria-hidden="true">⭐</span><span><b>55</b>points to earn</span></div>
+          <div class="float-card mid"><span aria-hidden="true">🧭</span><span><b>16</b>scenes</span></div>
+          <div class="float-card bottom"><span aria-hidden="true">🏅</span><span><b>10</b>badges</span></div>
+        </div>
+      </div>
+
+      <div class="bento">
+        <article class="bento-card">
+          <span class="big-emoji" aria-hidden="true">🗺️</span>
+          <span class="num">01</span>
+          <h3>Map Lab</h3>
+          <p>Drag the labels onto the Mediterranean map and fix the geography.</p>
+        </article>
+        <article class="bento-card">
+          <span class="big-emoji" aria-hidden="true">🎧</span>
+          <span class="num">02</span>
+          <h3>Listening Station</h3>
+          <p>Play the 18-second recording up to three times and fill five gaps.</p>
+        </article>
+        <article class="bento-card">
+          <span class="big-emoji" aria-hidden="true">🔥</span>
+          <span class="num">03</span>
+          <h3>Streaks &amp; XP</h3>
+          <p>Perfect scenes build your streak. Every scene earns XP and badges.</p>
+        </article>
+        <article class="bento-card">
+          <span class="big-emoji" aria-hidden="true">🖨️</span>
+          <span class="num">04</span>
+          <h3>Print Pack</h3>
+          <p>A4 worksheet and a separate teacher answer key, ready to print.</p>
+        </article>
+      </div>
+
+      <div class="teacher-tools">
+        <div>
+          <h3>Teacher tools</h3>
+          <p>Print a clean worksheet for class or the answer key for your desk. No internet needed.</p>
+        </div>
+        <span class="spacer"></span>
+        <button class="btn small" id="printWorksheetBtn" type="button">🖨️ Print worksheet</button>
+        <button class="btn small mint" id="printKeyBtn" type="button">🔑 Print answer key</button>
+      </div>
+    </section>
+
+    <!-- ================= QUIZ ================= -->
+    <section class="screen quiz" id="screenQuiz" aria-labelledby="sceneStatement" hidden>
+      <div class="quiz-head">
+        <div class="left">
+          <span class="pill location" id="sceneLocation">CLASSROOM 6B</span>
+          <span class="pill type" id="sceneType">True / False</span>
+        </div>
+        <div class="scene-counter">Scene <b id="sceneNumber">1</b> <span aria-hidden="true">/</span> 16</div>
+      </div>
+      <div class="progress-track" role="progressbar" aria-label="Quiz progress" aria-valuemin="1" aria-valuemax="16" aria-valuenow="1" id="progressBar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <div class="quiz-grid">
+        <section class="question-card" id="questionCard" aria-labelledby="sceneStatement">
+          <div class="question-topline">
+            <span class="points-pill" id="pointsPill">⭐ 1 point</span>
+            <span class="pill" id="sceneGroup">SCENE 01</span>
+          </div>
+          <h2 id="sceneStatement" tabindex="-1">Scene statement</h2>
+          <p class="instruction" id="sceneInstruction">Choose the best answer.</p>
+          <div class="question-body" id="questionBody"></div>
+          <div class="feedback" id="feedback" role="status" aria-live="polite" hidden></div>
+          <div class="quiz-actions">
+            <button class="btn primary" id="checkBtn" type="button">Check answer</button>
+            <button class="btn secondary" id="nextBtn" type="button" hidden>Next scene →</button>
+            <button class="btn ghost" id="hintBtn" type="button">💡 Show hint</button>
+          </div>
+        </section>
+
+        <aside class="side-rail">
+          <section class="rail-card progress-card" aria-label="Scene progress">
+            <h3>Your route</h3>
+            <div class="dots" id="progressDots"></div>
+            <div class="progress-legend">
+              <span><i style="background:#6ee7b7"></i>done</span>
+              <span><i style="background:#ffd93d"></i>perfect</span>
+              <span><i style="background:#ff6b6b"></i>now</span>
+            </div>
+          </section>
+          <section class="rail-card notes-card" aria-label="Hint and field notes">
+            <h3>Field notes</h3>
+            <p id="hintText">Stuck? Reveal a clue. It does not cost you points.</p>
+            <div class="why hidden" id="companionNote"></div>
+          </section>
+          <section class="rail-card mini-badges-card" aria-label="Badges earned">
+            <h3>Badges</h3>
+            <div class="mini-badges" id="miniBadges"></div>
+          </section>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ================= RESULTS ================= -->
+    <section class="screen results" id="screenResults" aria-labelledby="resultTitle" hidden>
+      <div class="result-hero">
+        <div class="result-copy">
+          <span class="eyebrow">🏁 Voyage complete</span>
+          <h1 id="resultTitle">You crossed the sea.</h1>
+          <p id="resultSubtitle">Here is how your Mediterranean quest went.</p>
+          <div class="result-stats">
+            <div class="stat"><b id="resultScore">0</b><span>points</span></div>
+            <div class="stat"><b id="resultXp">0</b><span>XP</span></div>
+            <div class="stat"><b id="resultTime">00:00</b><span>time</span></div>
+            <div class="stat"><b id="resultStreak">0</b><span>best streak</span></div>
+          </div>
+          <p class="best-note" id="bestNote"></p>
+          <div class="result-actions">
+            <button class="btn primary" id="playAgainBtn" type="button">↻ Play again</button>
+            <button class="btn" id="printWorksheetBtn2" type="button">🖨️ Worksheet</button>
+            <button class="btn mint" id="printKeyBtn2" type="button">🔑 Answer key</button>
+          </div>
+        </div>
+        <div class="score-ring" id="scoreRing" style="--pct:0" aria-label="Score">
+          <div class="score-inner">
+            <div class="score" id="scoreValue">0</div>
+            <div class="outof" id="scoreOutOf">out of 55</div>
+            <div class="pct" id="scorePct">0%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title"><h2>Badge cabinet</h2><span class="line"></span><span class="pill" id="badgeCount">0 / 10</span></div>
+      <div class="badges-grid" id="badgesGrid"></div>
+
+      <div class="section-title"><h2>Scene review</h2><span class="line"></span><span class="pill" id="reviewCount">0 scenes</span></div>
+      <div class="review-list" id="reviewList"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>🌊 Mediterranean Quest · Unit 1 · works offline</span>
+    <span class="spacer"></span>
+    <button class="link-btn" id="printFooterBtn" type="button">Print worksheet</button>
+    <span aria-hidden="true">·</span>
+    <button class="link-btn" id="printKeyFooterBtn" type="button">Answer key</button>
+    <span aria-hidden="true">·</span>
+    <button class="link-btn" id="resetFooterBtn" type="button">Reset progress</button>
+  </footer>
+</div>
+
+<div id="printRoot" aria-hidden="true"></div>
+<div id="toastHost" aria-live="polite" aria-atomic="false"></div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+<noscript><p style="padding:24px;font-weight:800;">This quiz needs JavaScript enabled. The printable worksheet is still available from the files.</p></noscript>
+<script>
+(function(){
+'use strict';
+
+/* ============================================================
+   Normalised quiz data
+   Source: test-material.json — see evidence/data-audit.md
+   ============================================================ */
+const DATA = {
+  title: "Unit 1 — Mediterranean Sea",
+  subtitle: "Mediterranean Sea — English Revision Quiz",
+  totalScenes: 16,
+  totalPoints: 55,
+  scenes: [
+    {
+      n: 1,
+      location: "CLASSROOM 6B",
+      type: "true_false",
+      statement: "The Mediterranean Sea lies between three continents, Europe, Africa and Asia.",
+      guideline: "The Mediterranean Sea is almost completely surrounded by land. It lies between Europe to the north, Asia to the east and Africa to the south.",
+      points: 1,
+      choices: [
+        { text: "True", correct: true },
+        { text: "False", correct: false }
+      ],
+      answer: "True",
+      companion: "The Mediterranean Sea lies between three continents."
+    },
+    {
+      n: 2,
+      location: "CLASSROOM 6B",
+      type: "true_false",
+      statement: "The Mediterranean is connected to the Atlantic through the Suez Canal.",
+      guideline: "The Mediterranean is connected to the Atlantic through the Strait of Gibraltar, a 14 km wide strait. The Suez Canal connects it to the Red Sea.",
+      points: 1,
+      choices: [
+        { text: "True", correct: false },
+        { text: "False", correct: true }
+      ],
+      answer: "False",
+      companion: "Gibraltar connects the Mediterranean to the Atlantic."
+    },
+    {
+      n: 3,
+      location: "CLASSROOM 6B",
+      type: "true_false",
+      statement: "The sea between Italy and the Balkan peninsula is called the Adriatic.",
+      guideline: "The Adriatic Sea lies between Italy and the Balkan Peninsula.",
+      points: 1,
+      choices: [
+        { text: "True", correct: true },
+        { text: "False", correct: false }
+      ],
+      answer: "True",
+      companion: "The Adriatic is between Italy and the Balkans."
+    },
+    {
+      n: 4,
+      location: "CLASSROOM 6B",
+      type: "true_false",
+      statement: "There are four large peninsulas in the Mediterranean Sea.",
+      guideline: "There are three large peninsulas: the Iberian, the Italian and the Balkan.",
+      points: 1,
+      choices: [
+        { text: "True", correct: false },
+        { text: "False", correct: true }
+      ],
+      answer: "False",
+      companion: "Three large peninsulas reach into the Mediterranean."
+    },
+    {
+      n: 5,
+      location: "MAP LAB",
+      type: "true_false",
+      statement: "Crete is one of the largest islands in the Mediterranean Sea.",
+      guideline: "Among the largest islands are Sicily, Corsica, Sardinia and Crete.",
+      points: 1,
+      choices: [
+        { text: "True", correct: true },
+        { text: "False", correct: false }
+      ],
+      answer: "True",
+      companion: "Crete is a large Mediterranean island."
+    },
+    {
+      n: 6,
+      location: "MAP LAB",
+      type: "matching_map",
+      statement: "Match the words to the map.",
+      guideline: "Drag each label to its map pin — or select a label, then tap a pin. The pins are not labelled, so use your geography.",
+      points: 6,
+      items: [
+        { id: "europe", label: "Europe" },
+        { id: "africa", label: "Africa" },
+        { id: "asia", label: "Asia" },
+        { id: "gibraltar", label: "Gibraltar Strait" },
+        { id: "suez", label: "Suez Canal" },
+        { id: "bosporus", label: "Bosporus" }
+      ],
+      targets: [
+        { id: "eur", letter: "A", label: "Europe (north)", x: 50, y: 15 },
+        { id: "afr", letter: "B", label: "Africa (south)", x: 45, y: 80 },
+        { id: "asia", letter: "C", label: "Asia (east)", x: 82, y: 48 },
+        { id: "gib", letter: "D", label: "Strait between Spain and Morocco", x: 7, y: 53 },
+        { id: "suez", letter: "E", label: "Canal linking the Mediterranean to the Red Sea", x: 92, y: 79 },
+        { id: "bos", letter: "F", label: "Strait between Europe and Asia", x: 84, y: 23 }
+      ],
+      answers: {
+        europe: "eur",
+        africa: "afr",
+        asia: "asia",
+        gibraltar: "gib",
+        suez: "suez",
+        bosporus: "bos"
+      },
+      companion: "Europe, Africa, Asia, Gibraltar, Suez, Bosporus."
+    },
+    {
+      n: 7,
+      location: "GRAMMAR CORNER",
+      type: "fill",
+      statement: "Put the verbs in the Simple Present.",
+      guideline: "Write the missing verb in each input field.",
+      points: 6,
+      text: "He ___ (sleep) 8 hours every night. The river ___ (flow) to the sea. She ___ (go) to school by bus. The dog ___ (has) a big bone. He ___ (writes) letters every week. It ___ (is) very cold today.",
+      answers: ["sleeps", "flows", "goes", "has", "writes", "is"],
+      companion: "Simple Present verb forms."
+    },
+    {
+      n: 8,
+      location: "WORD WORKSHOP",
+      type: "short",
+      statement: "1) Mary eats never fish.",
+      guideline: "Put the words in the correct order.",
+      points: 1,
+      words: ["Mary", "eats", "never", "fish"],
+      answers: ["Mary never eats fish."],
+      companion: "Adverb of frequency position."
+    },
+    {
+      n: 9,
+      location: "WORD WORKSHOP",
+      type: "short",
+      statement: "2) parents My the theatre. go to often",
+      guideline: "Put the words in the correct order.",
+      points: 1,
+      words: ["parents", "My", "the", "theatre", "go", "to", "often"],
+      answers: ["My parents often go to the theatre."],
+      companion: "Word order with adverbs."
+    },
+    {
+      n: 10,
+      location: "WORD WORKSHOP",
+      type: "short",
+      statement: "3) drink They usually for breakfast. tea",
+      guideline: "Put the words in the correct order.",
+      points: 1,
+      words: ["drink", "They", "usually", "for", "breakfast", "tea"],
+      answers: ["They usually drink tea for breakfast."],
+      companion: "Present Simple routine."
+    },
+    {
+      n: 11,
+      location: "WORD WORKSHOP",
+      type: "short",
+      statement: "4) the Helen always to together. and cinema go Mary",
+      guideline: "Put the words in the correct order.",
+      points: 1,
+      words: ["the", "Helen", "always", "to", "together", "and", "cinema", "go", "Mary"],
+      answers: [
+        "Mary and Helen always go to the cinema together.",
+        "Helen and Mary always go to the cinema together."
+      ],
+      companion: "Compound subject word order."
+    },
+    {
+      n: 12,
+      location: "WORD WORKSHOP",
+      type: "short",
+      statement: "5) school. brother always is early for My",
+      guideline: "Put the words in the correct order.",
+      points: 1,
+      words: ["school", "brother", "always", "is", "early", "for", "My"],
+      answers: ["My brother is always early for school."],
+      companion: "Frequency adverb placement."
+    },
+    {
+      n: 13,
+      location: "TENSE LAB",
+      type: "fill",
+      statement: "Present Simple or Continuous? Use the verbs in brackets in the correct tense.",
+      guideline: "Write the correct present tense in each input field.",
+      points: 10,
+      text: "a. Shhh!!! Be quiet! Sonia ___ (do) her homework.<br>b. Joe is not at home now. He ___ (study) in the library.<br>c. Marie isn't a Canadian. She ___ (come) from France.<br>d. Bob usually ___ (stay) at home on Saturday morning but this Saturday he ___ (travel) to Patras with his parents.<br>e. Helen ___ (not eat) out very often. She loves eating at home.<br>f. The children ___ (wait) for the bus every morning but today they ___ (go) by train.<br>g. My parents ___ (visit) my grandparents this weekend.<br>h. \"What ___ you ___ (do)?\" \"I ___ (wash) my car.\"",
+      answers: [
+        "is doing",
+        "is studying",
+        "comes",
+        "stays",
+        "is travelling",
+        "doesn't eat",
+        "wait",
+        "are going",
+        "are visiting",
+        "are",
+        "doing",
+        "am washing"
+      ],
+      alternatives: {
+        4: ["is traveling"],
+        5: ["does not eat"]
+      },
+      companion: "Present Simple vs Continuous."
+    },
+    {
+      n: 14,
+      location: "SUBJECT HALL",
+      type: "matching",
+      statement: "Match the two columns.",
+      guideline: "Match each school subject to its description.",
+      points: 10,
+      items: [
+        { id: "history", label: "History" },
+        { id: "maths", label: "Mathematics" },
+        { id: "religion", label: "Religion" },
+        { id: "geography", label: "Geography" },
+        { id: "english", label: "English" },
+        { id: "music", label: "Music" },
+        { id: "chemistry", label: "Chemistry" },
+        { id: "biology", label: "Biology" },
+        { id: "art", label: "Art" },
+        { id: "pe", label: "Physical Education" }
+      ],
+      targets: [
+        { id: "hist", letter: "A", label: "Ancient & modern civilizations" },
+        { id: "math", letter: "B", label: "Numbers & shapes" },
+        { id: "rel", letter: "C", label: "God, Buddha, Allah and Shiva" },
+        { id: "geo", letter: "D", label: "Countries, continents, seas" },
+        { id: "eng", letter: "E", label: "UK language" },
+        { id: "mus", letter: "F", label: "How to sing well" },
+        { id: "chem", letter: "G", label: "Lab experiments" },
+        { id: "bio", letter: "H", label: "Human body" },
+        { id: "art", letter: "I", label: "Paint & draw" },
+        { id: "pe", letter: "J", label: "Sport & exercises" }
+      ],
+      answers: {
+        history: "hist",
+        maths: "math",
+        religion: "rel",
+        geography: "geo",
+        english: "eng",
+        music: "mus",
+        chemistry: "chem",
+        biology: "bio",
+        art: "art",
+        pe: "pe"
+      },
+      companion: "School subjects & descriptions."
+    },
+    {
+      n: 15,
+      location: "DIALOGUE STUDIO",
+      type: "dialogue",
+      statement: "Read the dialogue and choose the correct verb forms.",
+      guideline: "Choose the correct verb form for each gap. Each gap is worth 4 points.",
+      points: 8,
+      lines: [
+        { speaker: "George", before: "What ", choice: 0, after: " now?" },
+        { speaker: "Petros", before: "I ", choice: 1, after: " breakfast." }
+      ],
+      choices: [
+        [
+          { text: "do you do", correct: false },
+          { text: "are you doing", correct: true }
+        ],
+        [
+          { text: "prepare", correct: false },
+          { text: "am preparing", correct: true }
+        ]
+      ],
+      companion: "Present Simple vs Continuous in dialogue."
+    },
+    {
+      n: 16,
+      location: "LISTENING STATION",
+      type: "listening",
+      statement: "Listen and fill in the missing words.",
+      guideline: "Listen and fill in the missing words. You can play the recording up to three times.",
+      points: 5,
+      audio: "Listen_Unit_1.mp3",
+      text: "Well, I'm doing a Geography ___ on India. I'm saving some photos of New Delhi, the ___. Look! Here's a good one of Taj Mahal, the landmark of New Delhi. I can ___ it and ___ it in my ___.",
+      answers: ["project", "capital", "copy", "paste", "document"],
+      transcript: "Well, I'm doing a Geography project on India. I'm saving some photos of New Delhi, the capital. Look! Here's a good one of Taj Mahal, the landmark of New Delhi. I can copy it and paste it in my document.",
+      companion: "Vocabulary: project, capital, copy, paste, document."
+    }
+  ]
+};
+
+const TYPE_LABELS = {
+  true_false: "True / False",
+  matching_map: "Map Lab",
+  fill: "Fill the gaps",
+  short: "Word order",
+  matching: "Match up",
+  dialogue: "Dialogue",
+  listening: "Listening"
+};
+
+const BADGES = [
+  { id: "first", icon: "🚀", label: "First Steps", desc: "Finish your first scene.", test: () => Object.keys(state.results).length >= 1 },
+  { id: "map", icon: "🗺️", label: "Map Master", desc: "Get every map pin right.", test: () => isPerfect(5) },
+  { id: "grammar", icon: "📐", label: "Grammar Guru", desc: "Perfect in a grammar scene.", test: () => isPerfect(6) || isPerfect(12) },
+  { id: "words", icon: "✍️", label: "Word Wizard", desc: "Perfect in all five word-order scenes.", test: () => [7, 8, 9, 10, 11].every(isPerfect) },
+  { id: "listen", icon: "🎧", label: "Golden Ear", desc: "Perfect in the listening station.", test: () => isPerfect(15) },
+  { id: "streak3", icon: "🔥", label: "On a Roll", desc: "3 perfect scenes in a row.", test: () => state.bestStreak >= 3 },
+  { id: "streak5", icon: "⚡", label: "Unstoppable", desc: "5 perfect scenes in a row.", test: () => state.bestStreak >= 5 },
+  { id: "climb", icon: "🧭", label: "Rising Navigator", desc: "Score at least 60%.", test: () => state.finished && finalPercent() >= 60 },
+  { id: "finish", icon: "🏁", label: "Sea Legs", desc: "Complete all 16 scenes.", test: () => state.finished },
+  { id: "perfect", icon: "👑", label: "Mediterranean Legend", desc: "Score 100%.", test: () => state.finished && finalPercent() === 100 }
+];
+
+
+const STORAGE_KEY = "medquest_v1";
+
+const state = {
+  sceneIndex: 0,
+  results: {},
+  drafts: {},
+  plays: {},
+  streak: 0,
+  bestStreak: 0,
+  xp: 0,
+  totalXp: 0,
+  level: 1,
+  xpToNext: 40,
+  totalMs: 0,
+  lastTick: null,
+  timerId: null,
+  hintShown: {},
+  badges: new Set(),
+  finished: false,
+  bestPct: 0,
+  matchSelection: null
+};
+
+const els = {
+  screenIntro: document.getElementById("screenIntro"),
+  screenQuiz: document.getElementById("screenQuiz"),
+  screenResults: document.getElementById("screenResults"),
+  hud: document.getElementById("hud"),
+  levelValue: document.getElementById("levelValue"),
+  xpFill: document.getElementById("xpFill"),
+  xpText: document.getElementById("xpText"),
+  streakValue: document.getElementById("streakValue"),
+  timerValue: document.getElementById("timerValue"),
+  startBtn: document.getElementById("startBtn"),
+  resumeBtn: document.getElementById("resumeBtn"),
+  resumeBanner: document.getElementById("resumeBanner"),
+  brandBtn: document.getElementById("brandBtn"),
+  printTopBtn: document.getElementById("printTopBtn"),
+  printWorksheetBtn: document.getElementById("printWorksheetBtn"),
+  printKeyBtn: document.getElementById("printKeyBtn"),
+  printWorksheetBtn2: document.getElementById("printWorksheetBtn2"),
+  printKeyBtn2: document.getElementById("printKeyBtn2"),
+  printFooterBtn: document.getElementById("printFooterBtn"),
+  printKeyFooterBtn: document.getElementById("printKeyFooterBtn"),
+  resetTopBtn: document.getElementById("resetTopBtn"),
+  resetFooterBtn: document.getElementById("resetFooterBtn"),
+  playAgainBtn: document.getElementById("playAgainBtn"),
+  sceneLocation: document.getElementById("sceneLocation"),
+  sceneType: document.getElementById("sceneType"),
+  sceneNumber: document.getElementById("sceneNumber"),
+  progressBar: document.getElementById("progressBar"),
+  progressFill: document.getElementById("progressFill"),
+  sceneGroup: document.getElementById("sceneGroup"),
+  sceneStatement: document.getElementById("sceneStatement"),
+  sceneInstruction: document.getElementById("sceneInstruction"),
+  questionBody: document.getElementById("questionBody"),
+  checkBtn: document.getElementById("checkBtn"),
+  nextBtn: document.getElementById("nextBtn"),
+  hintBtn: document.getElementById("hintBtn"),
+  feedback: document.getElementById("feedback"),
+  hintText: document.getElementById("hintText"),
+  companionNote: document.getElementById("companionNote"),
+  progressDots: document.getElementById("progressDots"),
+  miniBadges: document.getElementById("miniBadges"),
+  pointsPill: document.getElementById("pointsPill"),
+  questionCard: document.getElementById("questionCard"),
+  resultTitle: document.getElementById("resultTitle"),
+  resultSubtitle: document.getElementById("resultSubtitle"),
+  resultScore: document.getElementById("resultScore"),
+  resultXp: document.getElementById("resultXp"),
+  resultTime: document.getElementById("resultTime"),
+  resultStreak: document.getElementById("resultStreak"),
+  scoreRing: document.getElementById("scoreRing"),
+  scoreValue: document.getElementById("scoreValue"),
+  scoreOutOf: document.getElementById("scoreOutOf"),
+  scorePct: document.getElementById("scorePct"),
+  bestNote: document.getElementById("bestNote"),
+  badgesGrid: document.getElementById("badgesGrid"),
+  badgeCount: document.getElementById("badgeCount"),
+  reviewList: document.getElementById("reviewList"),
+  reviewCount: document.getElementById("reviewCount"),
+  toastHost: document.getElementById("toastHost"),
+  confetti: document.getElementById("confetti"),
+  printRoot: document.getElementById("printRoot")
+};
+
+function save() {
+  try {
+    const data = {
+      sceneIndex: state.sceneIndex,
+      results: state.results,
+      drafts: state.drafts,
+      plays: state.plays,
+      streak: state.streak,
+      bestStreak: state.bestStreak,
+      xp: state.xp,
+      totalXp: state.totalXp,
+      level: state.level,
+      xpToNext: state.xpToNext,
+      totalMs: state.totalMs,
+      hintShown: state.hintShown,
+      finished: state.finished,
+      bestPct: state.bestPct,
+      badges: Array.from(state.badges)
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (e) { /* ignore */ }
+}
+
+function load() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    Object.assign(state, data);
+    if (Array.isArray(data.badges)) state.badges = new Set(data.badges);
+  } catch (e) { /* ignore */ }
+}
+
+function formatTime(ms) {
+  const total = Math.floor(ms / 1000);
+  const m = String(Math.floor(total / 60)).padStart(2, "0");
+  const s = String(total % 60).padStart(2, "0");
+  return m + ":" + s;
+}
+
+function startTimer() {
+  if (state.timerId) return;
+  state.lastTick = Date.now();
+  state.timerId = setInterval(() => {
+    const now = Date.now();
+    if (state.lastTick) state.totalMs += now - state.lastTick;
+    state.lastTick = now;
+    els.timerValue.textContent = formatTime(state.totalMs);
+  }, 250);
+}
+
+function stopTimer() {
+  if (state.timerId) {
+    clearInterval(state.timerId);
+    state.timerId = null;
+  }
+  if (state.lastTick) {
+    state.totalMs += Date.now() - state.lastTick;
+    state.lastTick = null;
+  }
+}
+
+function addXP(n) {
+  if (!n) return;
+  state.xp += n;
+  state.totalXp += n;
+  while (state.xp >= state.xpToNext) {
+    state.xp -= state.xpToNext;
+    state.level++;
+    state.xpToNext = Math.round(state.xpToNext * 1.28);
+    toast("Level up!", "You reached level " + state.level + ".", "🏆");
+    burstConfetti(24);
+  }
+  updateHUD();
+  save();
+}
+
+function updateHUD() {
+  els.hud.hidden = els.screenQuiz.hidden && els.screenResults.hidden;
+  if (els.hud.hidden) return;
+  els.levelValue.textContent = String(state.level);
+  const pct = Math.max(0, Math.min(1, state.xp / state.xpToNext));
+  els.xpFill.style.width = (pct * 100).toFixed(1) + "%";
+  els.xpText.textContent = state.xp + " / " + state.xpToNext + " XP";
+  els.streakValue.textContent = String(state.streak);
+  els.timerValue.textContent = formatTime(state.totalMs);
+  renderMiniBadges();
+}
+
+function toast(title, msg, icon = "✨") {
+  const el = document.createElement("div");
+  el.className = "toast";
+  el.innerHTML = '<span class="t-icon">' + icon + '</span><div><strong>' + escapeHtml(title) + '</strong><small>' + escapeHtml(msg) + '</small></div>';
+  els.toastHost.appendChild(el);
+  setTimeout(() => { el.classList.add("out"); setTimeout(() => el.remove(), 260); }, 2200);
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+function finalPercent() {
+  if (!DATA.totalPoints) return 0;
+  let got = 0;
+  for (const r of Object.values(state.results)) got += r.earned || 0;
+  return Math.round((got / DATA.totalPoints) * 100);
+}
+
+function isPerfect(n1based) {
+  const r = state.results[n1based];
+  if (!r) return false;
+  const scene = DATA.scenes[n1based - 1];
+  return Math.abs(r.earned - scene.points) < 0.001;
+}
+
+
+/* ============================================================
+   Grading + question rendering
+   ============================================================ */
+function normalizeText(s) {
+  return String(s == null ? "" : s)
+    .toLowerCase()
+    .replace(/[’‘]/g, "'")
+    .replace(/[^a-z0-9' ]+/g, " ")
+    .replace(/[']/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function normalizeSentence(s) {
+  return normalizeText(s).replace(/\s+/g, " ").trim();
+}
+
+function round1(n) {
+  return Math.round(n * 10) / 10;
+}
+
+function formatPoints(n) {
+  return Number.isInteger(n) ? String(n) : String(round1(n));
+}
+
+function defaultDraft(scene) {
+  switch (scene.type) {
+    case "true_false": return { value: "" };
+    case "fill":
+    case "listening": return { values: Array(scene.answers.length).fill("") };
+    case "short": return { value: "", used: [] };
+    case "matching":
+    case "matching_map": return { values: {} };
+    case "dialogue": return { values: [] };
+    default: return {};
+  }
+}
+
+function getDraft(scene) {
+  if (!state.drafts) state.drafts = {};
+  if (!state.drafts[scene.n]) state.drafts[scene.n] = defaultDraft(scene);
+  return state.drafts[scene.n];
+}
+
+function setDraft(scene, draft) {
+  if (!state.drafts) state.drafts = {};
+  state.drafts[scene.n] = draft;
+}
+
+function fillMatches(scene, index, value) {
+  const want = scene.answers[index];
+  if (normalizeText(value) === normalizeText(want)) return true;
+  const alts = scene.alternatives && scene.alternatives[index];
+  if (alts) return alts.some(a => normalizeText(a) === normalizeText(value));
+  return false;
+}
+
+function gradeScene(scene, given) {
+  const details = [];
+  let correct = 0;
+  let total = 1;
+
+  if (scene.type === "true_false") {
+    total = 1;
+    const chosen = given && given.value ? given.value : "";
+    const ok = normalizeText(chosen) === normalizeText(scene.answer);
+    if (ok) correct++;
+    details.push({ label: scene.statement, given: chosen || "—", expected: scene.answer, ok });
+  } else if (scene.type === "fill" || scene.type === "listening") {
+    total = scene.answers.length;
+    const values = (given && given.values) || [];
+    scene.answers.forEach((ans, i) => {
+      const val = values[i] || "";
+      const ok = fillMatches(scene, i, val);
+      if (ok) correct++;
+      details.push({ label: "Gap " + (i + 1), given: val || "—", expected: ans, ok });
+    });
+  } else if (scene.type === "short") {
+    total = 1;
+    const val = (given && given.value) || "";
+    const norm = normalizeSentence(val);
+    const ok = !!norm && scene.answers.some(a => normalizeSentence(a) === norm);
+    if (ok) correct++;
+    details.push({ label: "Sentence", given: val || "—", expected: scene.answers[0], ok });
+  } else if (scene.type === "matching" || scene.type === "matching_map") {
+    total = scene.items.length;
+    const values = (given && given.values) || {};
+    scene.items.forEach(item => {
+      const got = values[item.id] || "";
+      const want = scene.answers[item.id];
+      const ok = got === want;
+      if (ok) correct++;
+      const target = scene.targets.find(t => t.id === want);
+      details.push({
+        label: item.label,
+        given: got ? (scene.targets.find(t => t.id === got) || {}).label || got : "—",
+        expected: target ? target.letter + " · " + target.label : want,
+        ok
+      });
+    });
+  } else if (scene.type === "dialogue") {
+    total = scene.choices.length;
+    const values = (given && given.values) || [];
+    scene.choices.forEach((opts, i) => {
+      const got = values[i];
+      const ok = got !== undefined && !!opts[got] && opts[got].correct;
+      if (ok) correct++;
+      const want = opts.find(o => o.correct);
+      details.push({
+        label: scene.lines[i].speaker + " — “" + scene.lines[i].before + "…" + scene.lines[i].after + "”",
+        given: got !== undefined && opts[got] ? opts[got].text : "—",
+        expected: want ? want.text : "",
+        ok
+      });
+    });
+  }
+
+  const earned = total ? (scene.points * correct) / total : 0;
+  return { correct, total, earned, perfect: correct === total, details };
+}
+
+function draftToGiven(scene) {
+  const d = getDraft(scene);
+  if (scene.type === "true_false") return { value: d.value || "" };
+  if (scene.type === "fill" || scene.type === "listening") return { values: (d.values || []).slice() };
+  if (scene.type === "short") return { value: d.value || "" };
+  if (scene.type === "matching" || scene.type === "matching_map") return { values: Object.assign({}, d.values || {}) };
+  if (scene.type === "dialogue") return { values: (d.values || []).slice() };
+  return {};
+}
+
+function targetLabel(scene, id) {
+  const t = scene.targets.find(x => x.id === id);
+  return t ? t.label : id;
+}
+
+function targetLetter(scene, id) {
+  const t = scene.targets.find(x => x.id === id);
+  return t ? t.letter : "?";
+}
+
+function renderFillText(scene, given, checked) {
+  const values = (given && given.values) || [];
+  const parts = scene.text.split(/(___|<br\s*\/?>)/i);
+  let blank = 0;
+  let html = "";
+  for (const part of parts) {
+    if (part === "___") {
+      const i = blank++;
+      const val = values[i] || "";
+      const ans = scene.answers[i] || "";
+      const ok = fillMatches(scene, i, val);
+      let cls = "";
+      if (checked) cls = ok ? " correct" : " wrong";
+      const width = Math.max(7, Math.min(22, ans.length + 2));
+      html += '<span class="blank-wrap"><input class="blank-input' + cls + '" data-index="' + i + '" type="text" value="' + escapeHtml(val) + '" size="' + width + '" style="width:' + width + 'ch" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Gap ' + (i + 1) + '"' + (checked ? " disabled" : "") + ">";
+      if (checked && !ok) html += '<span class="inline-fix bad">✗ ' + escapeHtml(ans) + "</span>";
+      if (checked && ok) html += '<span class="inline-fix">✓</span>';
+      html += "</span>";
+    } else if (/^<br/i.test(part)) {
+      html += "<br>";
+    } else {
+      html += escapeHtml(part);
+    }
+  }
+  return html;
+}
+
+function renderAudio(scene, checked) {
+  const plays = (state.plays && state.plays[scene.n]) || 0;
+  const left = Math.max(0, 3 - plays);
+  const disabled = left === 0 ? " disabled" : "";
+  return (
+    '<div class="audio-card" data-audio-scene="' + scene.n + '">' +
+      '<div class="audio-top">' +
+        '<button class="play-btn" id="playBtn" type="button" aria-label="Play listening recording"' + disabled + '>▶</button>' +
+        '<div><div class="audio-title">🎧 ' + escapeHtml(scene.audio) + '</div><div class="audio-sub">17-second recording · listening station</div></div>' +
+        '<span class="audio-time" id="audioTime">0:00 / 0:18</span>' +
+      "</div>" +
+      '<div class="seek-row">' +
+        '<input id="seekBar" type="range" min="0" max="100" value="0" step="1" aria-label="Audio position"' + (left === 0 ? " disabled" : "") + ">" +
+        '<span class="plays-left" id="playsLeft">' + left + ' / 3 plays</span>' +
+      "</div>" +
+      '<div class="audio-status" id="audioStatus" aria-live="polite">' + (left === 0 ? "No plays left. You can still answer." : "Ready — press play.") + "</div>" +
+      '<audio id="audioEl" src="' + escapeHtml(scene.audio) + '" preload="metadata"></audio>' +
+      (checked ? '<details class="transcript"><summary>Show transcript (after answering)</summary><p>' + escapeHtml(scene.transcript) + "</p></details>" : "") +
+    "</div>"
+  );
+}
+
+function renderQuestion(scene, given, checked) {
+  const dis = checked ? " disabled" : "";
+  if (scene.type === "true_false") {
+    const val = (given && given.value) || "";
+    return '<div class="tf-grid" role="group" aria-label="Choose True or False">' + scene.choices.map(c => {
+      let cls = "tf-btn";
+      if (val === c.text) cls += " selected";
+      if (checked) {
+        if (c.correct) cls += " correct";
+        else if (val === c.text) cls += " wrong";
+      }
+      const mark = checked ? (c.correct ? "✓" : (val === c.text ? "✗" : "")) : "";
+      return '<button class="' + cls + '" type="button" data-tf="' + escapeHtml(c.text) + '" aria-pressed="' + (val === c.text) + '"' + dis + '><span class="mark" aria-hidden="true">' + mark + "</span>" + escapeHtml(c.text) + "</button>";
+    }).join("") + "</div>";
+  }
+
+  if (scene.type === "fill") {
+    return '<div class="fill-text">' + renderFillText(scene, given, checked) + "</div>" +
+      '<div class="fill-note"><span aria-hidden="true">⌨️</span> Tip: press Enter in a gap to check the whole scene.</div>';
+  }
+
+  if (scene.type === "listening") {
+    return renderAudio(scene, checked) + '<div class="fill-text">' + renderFillText(scene, given, checked) + "</div>";
+  }
+
+  if (scene.type === "short") {
+    const val = (given && given.value) || "";
+    const used = (given && given.used) || [];
+    let cls = "short-input";
+    if (checked) {
+      const ok = scene.answers.some(a => normalizeSentence(a) === normalizeSentence(val));
+      cls += ok ? " correct" : " wrong";
+    }
+    let html = '<div class="scrambled" aria-label="Scrambled words">🔀 ' + escapeHtml(scene.statement.replace(/^\d+\)\s*/, "")) + "</div>" +
+      '<div class="answer-line"><label for="shortInput">Your sentence</label><input id="shortInput" class="' + cls + '" type="text" value="' + escapeHtml(val) + '" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type the sentence in the correct order…"' + dis + "></div>" +
+      '<div class="short-tools"><button class="btn small ghost" type="button" id="undoWordBtn"' + dis + ">↶ Undo word</button><button class=\"btn small ghost\" type=\"button\" id=\"clearWordsBtn\"" + dis + ">Clear</button></div>" +
+      '<div class="word-bank" aria-label="Word bank"><span class="word-bank-label">Word bank — tap a word to add it</span>';
+    scene.words.forEach((w, i) => {
+      const isUsed = used.includes(i);
+      html += '<button class="word-chip' + (isUsed ? " used" : "") + '" type="button" data-word-index="' + i + '"' + (checked || isUsed ? " disabled" : "") + ">" + escapeHtml(w) + "</button>";
+    });
+    html += "</div>";
+    if (checked) {
+      const ok = scene.answers.some(a => normalizeSentence(a) === normalizeSentence(val));
+      if (!ok) html += '<p class="fill-note" style="color:#b91c1c">Correct sentence: <strong>' + escapeHtml(scene.answers[0]) + "</strong></p>";
+    }
+    return html;
+  }
+
+  if (scene.type === "matching" || scene.type === "matching_map") {
+    const values = (given && given.values) || {};
+    const selected = state.matchSelection && state.matchSelection.scene === scene.n ? state.matchSelection.item : null;
+    const labelHtml = scene.items.map(item => {
+      const assigned = values[item.id];
+      let cls = "match-label";
+      if (assigned) cls += " used";
+      if (selected === item.id) cls += " selected";
+      if (checked) {
+        const ok = values[item.id] === scene.answers[item.id];
+        cls += ok ? " correct" : " wrong";
+      }
+      return '<button class="' + cls + '" type="button" data-item-id="' + item.id + '" aria-pressed="' + (selected === item.id) + '" draggable="' + (!checked) + '"' + dis + ">" + escapeHtml(item.label) + (scene.type === "matching_map" ? '<span class="drag-hint" aria-hidden="true">drag</span>' : "") + "</button>";
+    }).join("");
+
+    if (scene.type === "matching_map") {
+      const zones = scene.targets.map(t => {
+        const assignedItem = Object.keys(values).find(k => values[k] === t.id);
+        const assignedLabel = assignedItem ? scene.items.find(i => i.id === assignedItem).label : "";
+        let cls = "map-zone";
+        if (assignedItem) cls += " filled";
+        if (checked) {
+          const ok = !assignedItem ? false : scene.answers[assignedItem] === t.id;
+          cls += ok ? " correct" : " wrong";
+        }
+        return '<button class="' + cls + '" type="button" data-target-id="' + t.id + '" style="left:' + t.x + "%;top:" + t.y + '%" aria-label="Map pin ' + t.letter + (assignedLabel ? ", " + assignedLabel : "") + '" title="Pin ' + t.letter + '"' + dis + ">" + (assignedLabel ? escapeHtml(assignedLabel) : t.letter) + "</button>";
+      }).join("");
+      return '<div class="map-layout">' +
+        '<div class="map-side"><h3>Labels — tap one, then tap a pin</h3><div class="match-labels">' + labelHtml + "</div>" +
+          '<p class="match-help">Drag a label onto a pin, or tap the label and then the pin.</p></div>' +
+        '<div><div class="map-shell"><img src="mediterranean-sea-map.jpg" width="600" height="439" alt="Blank map of the Mediterranean Sea with six lettered pins">' + zones + '<span class="map-compass" aria-hidden="true">N</span><span class="map-legend">Mediterranean Sea</span></div>' +
+          (checked ? '<div class="map-answer-list">' + scene.targets.map(t => '<span>' + t.letter + " · " + escapeHtml(t.label) + "</span>").join("") + "</div>" : "") +
+        "</div></div>";
+    }
+
+    const targets = scene.targets.map(t => {
+      const assignedItem = Object.keys(values).find(k => values[k] === t.id);
+      const assigned = assignedItem ? scene.items.find(i => i.id === assignedItem) : null;
+      let cls = "match-target";
+      if (checked) {
+        const ok = assigned && scene.answers[assigned.id] === t.id;
+        cls += ok ? " correct" : " wrong";
+      }
+      return '<button class="' + cls + '" type="button" data-target-id="' + t.id + '"' + dis + '><span class="slot' + (assigned ? " filled" : "") + '">' + t.letter + '</span><span class="target-text">' + (assigned ? '<span class="assign">' + escapeHtml(assigned.label) + "</span>" : "") + '<span class="desc">' + escapeHtml(t.label) + "</span></span></button>";
+    }).join("");
+    return '<div class="match-layout"><div class="match-column"><h3>Words</h3><div class="match-labels">' + labelHtml + "</div></div><div class=\"match-column\"><h3>Descriptions</h3><div class=\"match-targets\">" + targets + "</div></div></div>";
+  }
+
+  if (scene.type === "dialogue") {
+    const values = (given && given.values) || [];
+    return '<div class="dialogue">' + scene.lines.map((line, qi) => {
+      const opts = scene.choices[qi];
+      const selected = values[qi];
+      const buttons = opts.map((o, oi) => {
+        let cls = "choice-btn";
+        if (selected === oi) cls += " selected";
+        if (checked) {
+          if (o.correct) cls += " correct";
+          else if (selected === oi) cls += " wrong";
+        }
+        return '<button class="' + cls + '" type="button" data-q="' + qi + '" data-val="' + oi + '" aria-pressed="' + (selected === oi) + '"' + dis + ">" + escapeHtml(o.text) + "</button>";
+      }).join("");
+      return '<div class="dialogue-line"><span class="speaker ' + (line.speaker === "Petros" ? "petros" : "") + '">' + escapeHtml(line.speaker) + '</span><div class="dialogue-bubble">' + escapeHtml(line.before) + '<span class="choice-group">' + buttons + "</span>" + escapeHtml(line.after) + "</div></div>";
+    }).join("") + '</div><p class="points-note">Each gap is worth 4 points · 8 points total</p>';
+  }
+
+  return '<p>Question type not supported.</p>';
+}
+
+function answerSummary(scene, result) {
+  if (!result) return "";
+  return '<ul class="answer-list">' + result.details.map(d => {
+    return "<li><span class=\"" + (d.ok ? "ok" : "no") + "\">" + (d.ok ? "✓" : "✗") + "</span><span><strong>" + escapeHtml(d.label) + ":</strong> " + (d.ok ? "your answer “" + escapeHtml(d.given) + "”" : "correct answer “" + escapeHtml(d.expected) + "”" + (d.given !== "—" ? " · you wrote “" + escapeHtml(d.given) + "”" : "")) + "</span></li>";
+  }).join("") + "</ul>";
+}
+
+
+/* ============================================================
+   Scene flow, checking, results
+   ============================================================ */
+function instructionFor(scene) {
+  switch (scene.type) {
+    case "true_false": return "Choose True or False.";
+    case "matching_map": return "Drag each label to its map pin — or tap a label, then tap a pin.";
+    case "fill": return "Write the missing word or phrase in each gap.";
+    case "short": return "Put the scrambled words in the correct order.";
+    case "matching": return "Match each subject to its description.";
+    case "dialogue": return "Choose the correct verb form in each gap.";
+    case "listening": return "Listen and fill in the five gaps. You have three plays.";
+    default: return "";
+  }
+}
+
+function renderScene(index, opts = {}) {
+  index = Math.max(0, Math.min(DATA.scenes.length - 1, index));
+  state.sceneIndex = index;
+  const scene = DATA.scenes[index];
+  const result = state.results[scene.n];
+  const checked = !!result;
+  const given = checked ? result.given : getDraft(scene);
+
+  els.sceneLocation.textContent = scene.location;
+  els.sceneType.textContent = TYPE_LABELS[scene.type] || scene.type;
+  els.sceneNumber.textContent = String(scene.n);
+  els.sceneGroup.textContent = "SCENE " + String(scene.n).padStart(2, "0");
+  els.pointsPill.textContent = "⭐ " + scene.points + (scene.points === 1 ? " point" : " points");
+  els.sceneStatement.textContent = scene.statement;
+  els.sceneInstruction.textContent = instructionFor(scene);
+  els.questionBody.innerHTML = renderQuestion(scene, given, checked);
+  els.feedback.hidden = true;
+  els.feedback.innerHTML = "";
+  els.checkBtn.hidden = checked;
+  els.checkBtn.disabled = false;
+  els.nextBtn.hidden = !checked;
+  els.nextBtn.textContent = index === DATA.scenes.length - 1 ? "See my results →" : "Next scene →";
+  els.hintBtn.hidden = checked;
+  els.hintBtn.disabled = false;
+  els.hintBtn.textContent = "💡 Show hint";
+
+  bindQuestion(scene, checked, index);
+  renderHint(scene, checked);
+  renderProgress();
+  updateHUD();
+
+  if (checked) showFeedback(scene, result, { focus: !!opts.focus });
+  else if (opts.focus) {
+    try { els.sceneStatement.focus({ preventScroll: true }); } catch (e) { /* ignore */ }
+  }
+  save();
+}
+
+function renderHint(scene, checked) {
+  const shown = !!state.hintShown[scene.n];
+  if (checked || shown) {
+    els.hintText.textContent = scene.guideline;
+    if (scene.companion) {
+      els.companionNote.innerHTML = "<b>Remember:</b> " + escapeHtml(scene.companion);
+      els.companionNote.classList.remove("hidden");
+    } else {
+      els.companionNote.classList.add("hidden");
+    }
+  } else {
+    els.hintText.textContent = "Stuck? Reveal a clue. It does not cost you points.";
+    els.companionNote.classList.add("hidden");
+  }
+  if (shown && !checked) {
+    els.hintBtn.textContent = "💡 Clue shown";
+    els.hintBtn.disabled = true;
+  }
+}
+
+function renderProgress() {
+  const done = Object.keys(state.results).length;
+  els.progressFill.style.width = Math.min(100, (done / DATA.scenes.length) * 100) + "%";
+  els.progressBar.setAttribute("aria-valuenow", String(Math.max(1, state.sceneIndex + 1)));
+  els.progressDots.innerHTML = DATA.scenes.map((s, i) => {
+    const r = state.results[s.n];
+    let cls = "dot";
+    if (r) cls += Math.abs(r.earned - s.points) < 0.001 ? " perfect" : " done";
+    if (i === state.sceneIndex && !r) cls += " current";
+    if (!r && i > state.sceneIndex) cls += " locked";
+    const label = "Scene " + s.n + (r ? ", " + formatPoints(r.earned) + " of " + s.points + " points" : i === state.sceneIndex ? ", current" : ", not reached");
+    return '<span class="' + cls + '" title="' + escapeHtml(label) + '" aria-label="' + escapeHtml(label) + '">' + (r && Math.abs(r.earned - s.points) < 0.001 ? "★" : s.n) + "</span>";
+  }).join("");
+}
+
+function renderMiniBadges() {
+  els.miniBadges.innerHTML = BADGES.map(b => {
+    const earned = state.badges.has(b.id);
+    return '<span class="mini-badge' + (earned ? "" : " locked") + '" title="' + escapeHtml(b.label + " — " + b.desc) + '">' + (earned ? b.icon : "🔒") + "</span>";
+  }).join("");
+}
+
+function checkBadges() {
+  const newly = [];
+  BADGES.forEach(b => {
+    if (!state.badges.has(b.id) && b.test()) {
+      state.badges.add(b.id);
+      newly.push(b);
+    }
+  });
+  if (newly.length) {
+    save();
+    updateHUD();
+    newly.forEach((b, i) => {
+      setTimeout(() => toast("Badge unlocked! " + b.label, b.desc, b.icon), i * 280);
+    });
+  }
+  return newly;
+}
+
+function bindQuestion(scene, checked, index) {
+  const q = els.questionBody;
+
+  q.querySelectorAll(".tf-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (checked) return;
+      const d = getDraft(scene);
+      d.value = btn.dataset.tf;
+      q.querySelectorAll(".tf-btn").forEach(b => {
+        const on = b.dataset.tf === d.value;
+        b.classList.toggle("selected", on);
+        b.setAttribute("aria-pressed", String(on));
+      });
+      save();
+    });
+  });
+
+  q.querySelectorAll(".blank-input").forEach(input => {
+    input.addEventListener("input", () => {
+      const d = getDraft(scene);
+      d.values[Number(input.dataset.index)] = input.value;
+      save();
+    });
+    input.addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        checkAnswer();
+      }
+    });
+  });
+
+  const shortInput = document.getElementById("shortInput");
+  if (shortInput) {
+    shortInput.addEventListener("input", () => {
+      const d = getDraft(scene);
+      d.value = shortInput.value;
+      save();
+    });
+    q.querySelectorAll(".word-chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        if (checked) return;
+        const idx = Number(chip.dataset.wordIndex);
+        const d = getDraft(scene);
+        if (!Array.isArray(d.used)) d.used = [];
+        if (d.used.includes(idx)) return;
+        d.used.push(idx);
+        const token = scene.words[idx];
+        shortInput.value = (shortInput.value.trim() ? shortInput.value.trim() + " " : "") + token;
+        d.value = shortInput.value;
+        chip.disabled = true;
+        chip.classList.add("used");
+        shortInput.focus();
+        save();
+      });
+    });
+    const undo = document.getElementById("undoWordBtn");
+    if (undo) undo.addEventListener("click", () => {
+      if (checked) return;
+      const d = getDraft(scene);
+      const used = Array.isArray(d.used) ? d.used : [];
+      const idx = used.pop();
+      const parts = shortInput.value.trim().split(/\s+/).filter(Boolean);
+      parts.pop();
+      shortInput.value = parts.join(" ");
+      d.value = shortInput.value;
+      if (idx !== undefined) {
+        const chip = q.querySelector('[data-word-index="' + idx + '"]');
+        if (chip) { chip.disabled = false; chip.classList.remove("used"); }
+      }
+      shortInput.focus();
+      save();
+    });
+    const clear = document.getElementById("clearWordsBtn");
+    if (clear) clear.addEventListener("click", () => {
+      if (checked) return;
+      const d = getDraft(scene);
+      d.value = "";
+      d.used = [];
+      shortInput.value = "";
+      q.querySelectorAll(".word-chip").forEach(chip => { chip.disabled = false; chip.classList.remove("used"); });
+      shortInput.focus();
+      save();
+    });
+  }
+
+  if (scene.type === "matching" || scene.type === "matching_map") {
+    q.querySelectorAll(".match-label").forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (checked) return;
+        const itemId = btn.dataset.itemId;
+        const d = getDraft(scene);
+        if (d.values[itemId]) {
+          delete d.values[itemId];
+          state.matchSelection = null;
+          renderScene(index, { focus: false });
+          return;
+        }
+        if (state.matchSelection && state.matchSelection.scene === scene.n && state.matchSelection.item === itemId) {
+          state.matchSelection = null;
+        } else {
+          state.matchSelection = { scene: scene.n, item: itemId };
+        }
+        renderScene(index, { focus: false });
+      });
+      btn.addEventListener("dragstart", e => {
+        if (checked) { e.preventDefault(); return; }
+        e.dataTransfer.setData("text/plain", btn.dataset.itemId);
+        e.dataTransfer.effectAllowed = "move";
+        state.dragItem = btn.dataset.itemId;
+        btn.classList.add("used");
+      });
+      btn.addEventListener("dragend", () => { state.dragItem = null; });
+    });
+
+    q.querySelectorAll(".match-target, .map-zone").forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (checked) return;
+        const targetId = btn.dataset.targetId;
+        const d = getDraft(scene);
+        const vals = d.values;
+        const sel = state.matchSelection && state.matchSelection.scene === scene.n ? state.matchSelection.item : null;
+        if (sel) {
+          assignMatch(scene, sel, targetId, index);
+          return;
+        }
+        const occupied = Object.keys(vals).find(k => vals[k] === targetId);
+        if (occupied) {
+          delete vals[occupied];
+          renderScene(index, { focus: false });
+        } else {
+          toast("Pick a label first", "Tap a word label, then tap this box.", "👆");
+        }
+      });
+      btn.addEventListener("dragover", e => {
+        if (checked) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+        btn.style.background = "#fff3d6";
+      });
+      btn.addEventListener("dragleave", () => { btn.style.background = ""; });
+      btn.addEventListener("drop", e => {
+        if (checked) return;
+        e.preventDefault();
+        const itemId = e.dataTransfer.getData("text/plain") || state.dragItem;
+        if (itemId) assignMatch(scene, itemId, btn.dataset.targetId, index);
+      });
+    });
+  }
+
+  q.querySelectorAll(".choice-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (checked) return;
+      const qi = Number(btn.dataset.q);
+      const oi = Number(btn.dataset.val);
+      const d = getDraft(scene);
+      d.values[qi] = oi;
+      renderScene(index, { focus: false });
+    });
+  });
+
+  bindAudio(scene, checked);
+}
+
+function assignMatch(scene, itemId, targetId, index) {
+  const d = getDraft(scene);
+  const vals = d.values;
+  Object.keys(vals).forEach(k => { if (vals[k] === targetId) delete vals[k]; });
+  vals[itemId] = targetId;
+  state.matchSelection = null;
+  renderScene(index, { focus: false });
+}
+
+function bindAudio(scene, checked) {
+  const audio = document.getElementById("audioEl");
+  if (!audio) return;
+  const playBtn = document.getElementById("playBtn");
+  const seek = document.getElementById("seekBar");
+  const timeEl = document.getElementById("audioTime");
+  const leftEl = document.getElementById("playsLeft");
+  const status = document.getElementById("audioStatus");
+  if (state.plays[scene.n] === undefined) state.plays[scene.n] = 0;
+
+  function fmt(sec) {
+    if (!isFinite(sec) || sec < 0) sec = 0;
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return m + ":" + String(s).padStart(2, "0");
+  }
+
+  function update() {
+    const dur = isFinite(audio.duration) ? audio.duration : 0;
+    const cur = isFinite(audio.currentTime) ? audio.currentTime : 0;
+    timeEl.textContent = fmt(cur) + " / " + fmt(dur || 18);
+    if (seek && dur) seek.value = String(Math.round((cur / dur) * 100));
+    const left = Math.max(0, 3 - state.plays[scene.n]);
+    leftEl.textContent = left + " / 3 plays";
+    const atStart = cur < 0.08 || audio.ended;
+    if (left === 0 && audio.paused) {
+      playBtn.disabled = true;
+      playBtn.textContent = "▶";
+    } else {
+      playBtn.disabled = false;
+      playBtn.textContent = audio.paused ? "▶" : "❚❚";
+    }
+    if (seek) seek.disabled = left === 0 && audio.paused;
+    if (atStart && left === 0 && !checked) status.textContent = "No plays left. You can still answer.";
+  }
+
+  playBtn.addEventListener("click", () => {
+    if (!audio.paused) { audio.pause(); return; }
+    const atStart = audio.currentTime < 0.08 || audio.ended;
+    if (atStart && state.plays[scene.n] >= 3) {
+      status.textContent = "No plays left — you have used all three.";
+      return;
+    }
+    if (audio.ended) audio.currentTime = 0;
+    status.textContent = "Playing…";
+    const p = audio.play();
+    if (p && typeof p.then === "function") {
+      p.then(() => {
+        if (atStart) {
+          state.plays[scene.n] = (state.plays[scene.n] || 0) + 1;
+          save();
+        }
+        status.textContent = "Playing… listen carefully.";
+        update();
+      }).catch(() => {
+        status.textContent = "Audio could not start. If you opened this as a file, check that Listen_Unit_1.mp3 is beside index.html.";
+      });
+    }
+  });
+
+  seek.addEventListener("input", () => {
+    if (!isFinite(audio.duration)) return;
+    audio.currentTime = (Number(seek.value) / 100) * audio.duration;
+  });
+  audio.addEventListener("loadedmetadata", update);
+  audio.addEventListener("timeupdate", update);
+  audio.addEventListener("play", update);
+  audio.addEventListener("pause", update);
+  audio.addEventListener("ended", () => { update(); status.textContent = "Recording finished."; });
+  audio.addEventListener("error", () => { status.textContent = "Audio could not load. Check that Listen_Unit_1.mp3 is beside index.html."; });
+  update();
+}
+
+function showFeedback(scene, result, opts = {}) {
+  const xp = result.xp || (10 + (result.perfect ? 5 : 0));
+  els.feedback.className = "feedback " + (result.perfect ? "perfect" : result.correct > 0 ? "partial" : "zero");
+  els.feedback.hidden = false;
+  els.feedback.tabIndex = -1;
+  els.feedback.innerHTML =
+    '<div class="feedback-head"><h3>' + (result.perfect ? "🎉 Perfect scene!" : result.correct > 0 ? "🧭 Good progress." : "🌊 Not quite yet.") + "</h3>" +
+    '<span class="xp-badge">+' + xp + " XP</span></div>" +
+    "<p><strong>" + result.correct + " / " + result.total + "</strong> correct · <strong>" + formatPoints(result.earned) + " / " + scene.points + "</strong> points</p>" +
+    answerSummary(scene, result) +
+    '<div class="explain"><b>Why:</b> ' + escapeHtml(scene.guideline) +
+    (scene.companion ? '<br><b>Remember:</b> ' + escapeHtml(scene.companion) : "") + "</div>";
+
+  els.checkBtn.hidden = true;
+  els.nextBtn.hidden = false;
+  els.nextBtn.textContent = state.sceneIndex === DATA.scenes.length - 1 ? "See my results →" : "Next scene →";
+  els.hintBtn.hidden = true;
+  if (opts.focus) {
+    try { els.feedback.focus({ preventScroll: true }); } catch (e) { /* ignore */ }
+  }
+}
+
+function checkAnswer() {
+  const scene = DATA.scenes[state.sceneIndex];
+  if (state.results[scene.n]) return;
+  const given = draftToGiven(scene);
+  if (scene.type === "true_false" && !given.value) {
+    toast("Choose an answer", "Pick True or False before checking.", "🤔");
+    return;
+  }
+  const result = gradeScene(scene, given);
+  result.given = given;
+  result.at = Date.now();
+  result.xp = 10 + (result.perfect ? 5 : 0);
+  state.results[scene.n] = result;
+  state.streak = result.perfect ? state.streak + 1 : 0;
+  state.bestStreak = Math.max(state.bestStreak, state.streak);
+  addXP(result.xp);
+  save();
+  checkBadges();
+  renderScene(state.sceneIndex, { focus: false });
+  showFeedback(scene, result, { focus: true });
+  if (result.perfect) burstConfetti(38);
+  save();
+}
+
+function nextScene() {
+  if (state.sceneIndex >= DATA.scenes.length - 1) {
+    finishRun();
+    return;
+  }
+  state.sceneIndex++;
+  state.matchSelection = null;
+  save();
+  renderScene(state.sceneIndex, { focus: true });
+  window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+}
+
+function finishRun() {
+  stopTimer();
+  state.finished = true;
+  const raw = Object.values(state.results).reduce((a, r) => a + r.earned, 0);
+  const pct = Math.round((raw / DATA.totalPoints) * 100);
+  const oldBest = state.bestPct || 0;
+  state._newBest = pct > oldBest;
+  state.bestPct = Math.max(oldBest, pct);
+  checkBadges();
+  save();
+  renderResults();
+  showScreen("results");
+  updateHUD();
+  burstConfetti(150);
+  toast("Voyage complete!", "You scored " + pct + "%. Check your badge cabinet.", "🏁");
+}
+
+function renderResults() {
+  const raw = Object.values(state.results).reduce((a, r) => a + r.earned, 0);
+  const score = round1(raw);
+  const pct = Math.round((raw / DATA.totalPoints) * 100);
+  const rank = pct >= 90 ? "Mediterranean Legend" : pct >= 75 ? "Sea Explorer" : pct >= 60 ? "Rising Navigator" : "Brave Deckhand";
+  els.resultTitle.textContent = rank;
+  els.resultSubtitle.textContent = "You collected " + formatPoints(score) + " of " + DATA.totalPoints + " points across 16 scenes. Every mistake is a clue for next time.";
+  els.resultScore.textContent = formatPoints(score);
+  els.resultXp.textContent = String(state.totalXp || 0);
+  els.resultTime.textContent = formatTime(state.totalMs);
+  els.resultStreak.textContent = String(state.bestStreak);
+  els.scoreRing.style.setProperty("--pct", String(pct));
+  els.scoreValue.textContent = String(Math.round(score));
+  els.scoreOutOf.textContent = "out of " + DATA.totalPoints;
+  els.scorePct.textContent = pct + "%";
+  els.scoreRing.setAttribute("aria-label", "Score: " + formatPoints(score) + " out of " + DATA.totalPoints + ", " + pct + " percent");
+  if (state.finished) {
+    els.bestNote.textContent = state._newBest ? "🏅 New personal best: " + state.bestPct + "%" : "🏅 Personal best: " + (state.bestPct || pct) + "%";
+  } else {
+    els.bestNote.textContent = "";
+  }
+
+  els.badgesGrid.innerHTML = BADGES.map(b => {
+    const earned = state.badges.has(b.id);
+    return '<div class="badge-card ' + (earned ? "earned" : "locked") + '"><div class="icon-circle" aria-hidden="true">' + (earned ? b.icon : "🔒") + "</div><b>" + escapeHtml(b.label) + "</b><small>" + escapeHtml(b.desc) + "</small></div>";
+  }).join("");
+  els.badgeCount.textContent = state.badges.size + " / " + BADGES.length;
+
+  const reached = Object.keys(state.results).length;
+  els.reviewCount.textContent = reached + " / " + DATA.scenes.length + " scenes";
+  els.reviewList.innerHTML = DATA.scenes.map((scene, i) => {
+    const r = state.results[scene.n];
+    if (!r) {
+      return '<details class="review-row"><summary><span class="num">' + String(scene.n).padStart(2, "0") + '</span><span><strong>' + escapeHtml(scene.location) + '</strong><span class="where">' + escapeHtml(TYPE_LABELS[scene.type] || "") + '</span></span><span class="review-score">not reached</span></summary></details>';
+    }
+    const cls = r.perfect ? "perfect" : r.correct === 0 ? "zero" : "";
+    return '<details class="review-row ' + cls + '"><summary><span class="num">' + (r.perfect ? "★" : String(scene.n).padStart(2, "0")) + '</span><span><strong>' + escapeHtml(scene.location) + '</strong><span class="where">' + escapeHtml(TYPE_LABELS[scene.type] || "") + '</span></span><span class="review-score">' + formatPoints(r.earned) + " / " + scene.points + '</span></summary><div class="review-body"><p><strong>' + escapeHtml(scene.statement) + "</strong></p>" + answerSummary(scene, r) + "<p><b>Why:</b> " + escapeHtml(scene.guideline) + "</p></div></details>";
+  }).join("");
+}
+
+function showScreen(name) {
+  els.screenIntro.hidden = name !== "intro";
+  els.screenQuiz.hidden = name !== "quiz";
+  els.screenResults.hidden = name !== "results";
+  updateHUD();
+  window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+}
+
+function hasProgress() {
+  return Object.keys(state.results).length > 0 || state.sceneIndex > 0 || state.finished;
+}
+
+function renderIntro() {
+  const done = Object.keys(state.results).length;
+  const has = hasProgress();
+  if (!has) {
+    els.startBtn.textContent = "Start the voyage →";
+    els.resumeBtn.classList.add("hidden");
+    els.resumeBanner.classList.add("hidden");
+  } else if (state.finished) {
+    els.startBtn.textContent = "Play again ↻";
+    els.resumeBtn.textContent = "See my results →";
+    els.resumeBtn.classList.remove("hidden");
+    const raw = Object.values(state.results).reduce((a, r) => a + r.earned, 0);
+    const pct = Math.round((raw / DATA.totalPoints) * 100);
+    els.resumeBanner.innerHTML = "🏁 Last voyage complete: <strong>" + pct + "%</strong> · personal best <strong>" + (state.bestPct || pct) + "%</strong>";
+    els.resumeBanner.classList.remove("hidden");
+  } else {
+    els.startBtn.textContent = "Start fresh";
+    els.resumeBtn.textContent = "Continue →";
+    els.resumeBtn.classList.remove("hidden");
+    els.resumeBanner.innerHTML = "🧭 Voyage in progress: <strong>scene " + (state.sceneIndex + 1) + " of 16</strong> · " + done + " scene" + (done === 1 ? "" : "s") + " checked · " + formatTime(state.totalMs);
+    els.resumeBanner.classList.remove("hidden");
+  }
+}
+
+function resetRun() {
+  stopTimer();
+  state.sceneIndex = 0;
+  state.results = {};
+  state.drafts = {};
+  state.plays = {};
+  state.streak = 0;
+  state.bestStreak = 0;
+  state.xp = 0;
+  state.totalXp = 0;
+  state.level = 1;
+  state.xpToNext = 40;
+  state.totalMs = 0;
+  state.hintShown = {};
+  state.badges = new Set();
+  state.finished = false;
+  state.matchSelection = null;
+  state._newBest = false;
+}
+
+function startRun(fresh) {
+  if (fresh) resetRun();
+  if (state.finished && !fresh) {
+    renderResults();
+    showScreen("results");
+    return;
+  }
+  showScreen("quiz");
+  startTimer();
+  renderScene(Math.min(state.sceneIndex, DATA.scenes.length - 1), { focus: true });
+  save();
+}
+
+function resetAll() {
+  if (!window.confirm("Reset all saved progress, badges and personal best? This cannot be undone.")) return;
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
+  state.bestPct = 0;
+  resetRun();
+  save();
+  showScreen("intro");
+  renderIntro();
+  toast("Progress reset", "A fresh voyage is ready.", "🧼");
+}
+
+
+/* ============================================================
+   Printable worksheet + teacher answer key
+   ============================================================ */
+function printFillText(scene, mode) {
+  let i = 0;
+  const parts = scene.text.split(/(___|<br\s*\/?>)/i);
+  return parts.map(part => {
+    if (part === "___") {
+      const ans = scene.answers[i++] || "";
+      return mode === "key"
+        ? '<span class="print-answer">' + escapeHtml(ans) + "</span>"
+        : '<span class="print-blank" aria-hidden="true"></span>';
+    }
+    if (/^<br/i.test(part)) return "<br>";
+    return escapeHtml(part);
+  }).join("");
+}
+
+function printHeader(title, subtitle, badge) {
+  return '<div class="print-head"><div><h1>' + escapeHtml(title) + "</h1><p>" + escapeHtml(subtitle) + '</p></div><span class="print-badge">' + escapeHtml(badge) + "</span></div>";
+}
+
+function printNameLine() {
+  return '<div class="name-line"><span>Name: </span><span>Class: </span><span>Date: </span></div>';
+}
+
+function printMap(scene, mode) {
+  const pins = scene.targets.map(t =>
+    '<span class="print-pin" style="left:' + t.x + "%;top:" + t.y + '%">' + t.letter + "</span>"
+  ).join("");
+  const list = scene.items.map(item => {
+    if (mode === "key") {
+      const tid = scene.answers[item.id];
+      const target = scene.targets.find(t => t.id === tid);
+      return "<li><span class=\"letter\">" + target.letter + "</span><strong>" + escapeHtml(item.label) + "</strong> — " + escapeHtml(target.label) + "</li>";
+    }
+    return '<li><span class="print-letter"></span>' + escapeHtml(item.label) + "</li>";
+  }).join("");
+  return '<div class="print-maplayout"><div class="print-map"><img src="mediterranean-sea-map.jpg" width="600" height="439" alt="Map of the Mediterranean Sea with lettered pins">' + pins + '</div><div class="print-map-questions">' +
+    (mode === "key" ? "<p><strong>Map key</strong></p>" : "<p><strong>Write the correct letter next to each place.</strong></p>") +
+    '<ul class="print-match-list" style="grid-template-columns:1fr">' + list + "</ul></div></div>";
+}
+
+function printMatching(scene, mode) {
+  const items = scene.items.map((item, i) => {
+    if (mode === "key") {
+      const tid = scene.answers[item.id];
+      const target = scene.targets.find(t => t.id === tid);
+      return '<li><span class="letter">' + target.letter + "</span>" + escapeHtml(item.label) + " — " + escapeHtml(target.label) + "</li>";
+    }
+    return '<li><span class="print-letter"></span>' + escapeHtml(item.label) + "</li>";
+  }).join("");
+  const targets = scene.targets.map(t => "<li><span class=\"letter\">" + t.letter + "</span>" + escapeHtml(t.label) + "</li>").join("");
+  if (mode === "key") {
+    return '<ul class="print-match-list">' + items + "</ul>";
+  }
+  return '<div class="print-maplayout"><div><p class="print-small"><strong>Words</strong></p><ul class="print-match-list" style="grid-template-columns:1fr">' + items + '</ul></div><div><p class="print-small"><strong>Descriptions</strong></p><ul class="print-match-list" style="grid-template-columns:1fr">' + targets + "</ul></div></div>";
+}
+
+function worksheetScene(scene) {
+  const meta = '<div class="print-meta"><span>Scene ' + scene.n + " · " + escapeHtml(scene.location) + "</span><span>" + escapeHtml(TYPE_LABELS[scene.type] || "") + " · " + scene.points + " pt</span></div>";
+  let body = "";
+  if (scene.type === "true_false") {
+    body = '<div class="print-tf"><span><span></span>True</span><span><span></span>False</span></div>';
+  } else if (scene.type === "fill" || scene.type === "listening") {
+    body = (scene.type === "listening" ? '<p class="print-small"><strong>🎧 Audio:</strong> Listen_Unit_1.mp3 (about 18 seconds). Play up to three times.</p>' : "") +
+      '<p class="print-q">' + printFillText(scene, "worksheet") + "</p>" +
+      '<p class="print-small">' + escapeHtml(scene.guideline) + "</p>";
+  } else if (scene.type === "short") {
+    body = '<p class="print-q"><strong>Scrambled words:</strong> ' + escapeHtml(scene.statement.replace(/^\d+\)\s*/, "")) + "</p>" +
+      '<p class="print-small">Write the sentence in the correct order.</p><div class="print-lines"><div class="print-line"></div><div class="print-line"></div></div>';
+  } else if (scene.type === "matching_map") {
+    body = printMap(scene, "worksheet");
+  } else if (scene.type === "matching") {
+    body = printMatching(scene, "worksheet");
+  } else if (scene.type === "dialogue") {
+    body = '<p class="print-small">Circle the correct verb form in each line.</p>' + scene.lines.map(line => {
+      const opts = scene.choices[line.choice].map(o => '<span class="print-opt">' + escapeHtml(o.text) + "</span>").join(" / ");
+      return '<p class="print-dialogue"><span class="print-speaker">' + escapeHtml(line.speaker) + ":</span>" + escapeHtml(line.before) + opts + escapeHtml(line.after) + "</p>";
+    }).join("") + '<p class="print-small">4 points per gap · 8 points total</p>';
+  }
+  return '<section class="print-scene">' + meta + "<h2>" + escapeHtml(scene.statement) + "</h2>" + body + "</section>";
+}
+
+function keyScene(scene) {
+  let body = "";
+  if (scene.type === "true_false") {
+    body = "<p><strong>Answer:</strong> " + escapeHtml(scene.answer) + "</p>";
+  } else if (scene.type === "fill" || scene.type === "listening") {
+    body = '<div class="print-key-answers">' + scene.answers.map((a, i) => '<p><b>' + (i + 1) + ".</b> " + escapeHtml(a) + "</p>").join("") + "</div>";
+    if (scene.type === "listening" && scene.transcript) {
+      body += '<div class="print-transcript"><strong>Transcript:</strong> ' + escapeHtml(scene.transcript) + "</div>";
+    }
+  } else if (scene.type === "short") {
+    body = scene.answers.map((a, i) => "<p><b>" + (i + 1) + ".</b> " + escapeHtml(a) + "</p>").join("");
+  } else if (scene.type === "matching_map" || scene.type === "matching") {
+    body = printMatching(scene, "key");
+  } else if (scene.type === "dialogue") {
+    body = scene.choices.map((opts, i) => {
+      const right = opts.find(o => o.correct);
+      return '<p class="print-key-line"><b>' + (i + 1) + ".</b> " + escapeHtml(scene.lines[i].speaker) + ": <strong>" + escapeHtml(right.text) + "</strong> — “" + escapeHtml(scene.lines[i].before) + right.text + escapeHtml(scene.lines[i].after) + "”</p>";
+    }).join("");
+  }
+  return '<div class="print-key-scene"><span class="pts">' + scene.points + " pt</span><b>Scene " + scene.n + " · " + escapeHtml(scene.location) + " · " + escapeHtml(TYPE_LABELS[scene.type] || "") + "</b>" + body + "</div>";
+}
+
+function buildWorksheet() {
+  const scenes = DATA.scenes.map(worksheetScene).join("");
+  return '<div class="print-page">' +
+    printHeader("Mediterranean Quest", "Unit 1 — Mediterranean Sea · English revision worksheet", "16 scenes · 55 points") +
+    printNameLine() +
+    '<div class="print-note"><strong>Instructions.</strong> Answer all 16 scenes. Write clearly. The listening section uses <strong>Listen_Unit_1.mp3</strong>; your teacher will play it up to three times. Total: <strong>55 points</strong>.</div>' +
+    scenes +
+    '<div class="print-footer"><span>Mediterranean Quest · Unit 1</span><span>Student worksheet</span></div>' +
+    "</div>";
+}
+
+function buildKey() {
+  const scenes = DATA.scenes.map(keyScene).join("");
+  return '<div class="print-page">' +
+    printHeader("Mediterranean Quest — Answer Key", "Unit 1 — Mediterranean Sea · teacher copy", "55 points") +
+    '<div class="print-note"><strong>Teacher note.</strong> The source material declared 66 points, but its 16 scenes add up to <strong>55</strong>. The app uses 55. Scene 13 answer 11 was corrected from “are doing” to “doing”; scene 15 was rebuilt as two 4-point dialogue gaps. Corrupted Greek companion lines were omitted. See <strong>evidence/data-audit.md</strong> for the full audit.</div>' +
+    '<div class="print-key print-key-only">' + scenes + "</div>" +
+    '<div class="print-footer"><span>Mediterranean Quest · Unit 1</span><span>Teacher answer key · total 55 points</span></div>' +
+    "</div>";
+}
+
+function buildPrint(mode) {
+  els.printRoot.innerHTML = mode === "key" ? buildKey() : buildWorksheet();
+  els.printRoot.setAttribute("aria-hidden", "false");
+}
+
+function openPrint(mode) {
+  buildPrint(mode);
+  const img = els.printRoot.querySelector(".print-map img");
+  const go = () => setTimeout(() => window.print(), 120);
+  if (img && !img.complete) {
+    img.addEventListener("load", go, { once: true });
+    img.addEventListener("error", go, { once: true });
+    setTimeout(go, 900);
+  } else {
+    go();
+  }
+}
+
+function initPrintQuery() {
+  let mode = null;
+  try {
+    const params = new URLSearchParams(window.location.search);
+    mode = params.get("print");
+  } catch (e) { /* ignore */ }
+  if (mode !== "worksheet" && mode !== "key") return false;
+  document.body.classList.add("print-standalone");
+  buildPrint(mode);
+  els.printRoot.insertAdjacentHTML("afterbegin",
+    '<div class="print-toolbar"><strong>' + (mode === "key" ? "Teacher answer key" : "Student worksheet") + '</strong><span class="spacer"></span><button type="button" id="printNowBtn">Print</button><button type="button" id="printBackBtn">Back to quiz</button></div>');
+  const now = document.getElementById("printNowBtn");
+  const back = document.getElementById("printBackBtn");
+  if (now) now.addEventListener("click", () => window.print());
+  if (back) back.addEventListener("click", () => { window.location.href = "index.html"; });
+  return true;
+}
+
+
+/* ============================================================
+   Initialisation, test hooks, confetti
+   ============================================================ */
+function prefersReducedMotion() {
+  try { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; }
+}
+
+let confettiParticles = [];
+let confettiRaf = null;
+
+function resizeConfetti() {
+  const canvas = els.confetti;
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  canvas.width = Math.floor(window.innerWidth * dpr);
+  canvas.height = Math.floor(window.innerHeight * dpr);
+}
+
+function burstConfetti(n) {
+  if (prefersReducedMotion()) return;
+  const canvas = els.confetti;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+  resizeConfetti();
+  const colors = ["#ff6b6b", "#ffd93d", "#6ee7b7", "#7dd3fc", "#c4b5fd", "#bef264", "#ffffff"];
+  for (let i = 0; i < n; i++) {
+    confettiParticles.push({
+      x: (window.innerWidth / 2) + (Math.random() - 0.5) * 90,
+      y: (window.innerHeight * 0.38) + (Math.random() - 0.5) * 40,
+      vx: (Math.random() - 0.5) * 11,
+      vy: -Math.random() * 9 - 2,
+      g: 0.22 + Math.random() * 0.12,
+      w: 5 + Math.random() * 8,
+      h: 4 + Math.random() * 7,
+      rot: Math.random() * Math.PI * 2,
+      vr: (Math.random() - 0.5) * 0.3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      life: 1
+    });
+  }
+  if (confettiRaf) return;
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  const tick = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    confettiParticles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += p.g;
+      p.vx *= 0.995;
+      p.rot += p.vr;
+      p.life -= 0.006;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.life);
+      ctx.translate(p.x * dpr, p.y * dpr);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w * dpr / 2, -p.h * dpr / 2, p.w * dpr, p.h * dpr);
+      ctx.restore();
+    });
+    confettiParticles = confettiParticles.filter(p => p.life > 0 && p.y < window.innerHeight + 80);
+    if (confettiParticles.length) {
+      confettiRaf = requestAnimationFrame(tick);
+    } else {
+      confettiRaf = null;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  };
+  confettiRaf = requestAnimationFrame(tick);
+}
+
+function validateData() {
+  const errors = [];
+  const warnings = [];
+  if (DATA.scenes.length !== 16) errors.push("Expected 16 scenes, found " + DATA.scenes.length);
+  if (DATA.totalScenes !== DATA.scenes.length) errors.push("totalScenes does not match scenes.length");
+  const sum = DATA.scenes.reduce((a, s) => a + s.points, 0);
+  if (sum !== DATA.totalPoints) errors.push("Point sum " + sum + " ≠ totalPoints " + DATA.totalPoints);
+  const seen = new Set();
+  DATA.scenes.forEach((s, i) => {
+    if (s.n !== i + 1) errors.push("Scene " + (i + 1) + " has n=" + s.n);
+    if (seen.has(s.n)) errors.push("Duplicate scene number " + s.n);
+    seen.add(s.n);
+    if (!s.statement || !s.guideline || !s.location) errors.push("Scene " + s.n + " is missing core text");
+    if (!(s.points > 0)) errors.push("Scene " + s.n + " has invalid points");
+    if (s.companionGreek) warnings.push("Scene " + s.n + " still has companionGreek (should be omitted)");
+    if (s.type === "true_false") {
+      if (!Array.isArray(s.choices) || s.choices.length !== 2) errors.push("Scene " + s.n + ": expected two choices");
+      else if (s.choices.filter(c => c.correct).length !== 1) errors.push("Scene " + s.n + ": expected exactly one correct choice");
+      if (!s.choices.some(c => c.text === s.answer)) errors.push("Scene " + s.n + ": answer does not match a choice");
+    } else if (s.type === "fill" || s.type === "listening") {
+      const blanks = (s.text.match(/___/g) || []).length;
+      if (blanks !== s.answers.length) errors.push("Scene " + s.n + ": " + blanks + " blanks but " + s.answers.length + " answers");
+      if (s.answers.some(a => !String(a).trim())) errors.push("Scene " + s.n + ": empty answer");
+      if (s.type === "listening" && !/\.mp3$/i.test(s.audio || "")) errors.push("Scene " + s.n + ": missing mp3");
+    } else if (s.type === "short") {
+      if (!s.words || !s.words.length) errors.push("Scene " + s.n + ": missing word bank");
+      if (!s.answers || !s.answers.length) errors.push("Scene " + s.n + ": missing answers");
+    } else if (s.type === "matching" || s.type === "matching_map") {
+      if (!s.items || !s.targets || !s.answers) errors.push("Scene " + s.n + ": incomplete matching data");
+      else {
+        const itemIds = new Set(s.items.map(x => x.id));
+        const targetIds = new Set(s.targets.map(x => x.id));
+        if (itemIds.size !== s.items.length) errors.push("Scene " + s.n + ": duplicate item id");
+        if (targetIds.size !== s.targets.length) errors.push("Scene " + s.n + ": duplicate target id");
+        if (s.items.length !== s.targets.length) errors.push("Scene " + s.n + ": item/target count mismatch");
+        s.items.forEach(item => {
+          if (!s.answers[item.id]) errors.push("Scene " + s.n + ": no answer for " + item.id);
+          else if (!targetIds.has(s.answers[item.id])) errors.push("Scene " + s.n + ": answer " + s.answers[item.id] + " has no target");
+        });
+        if (s.type === "matching_map") {
+          s.targets.forEach(t => {
+            if (typeof t.x !== "number" || typeof t.y !== "number" || t.x < 0 || t.x > 100 || t.y < 0 || t.y > 100) errors.push("Scene " + s.n + ": invalid pin position for " + t.id);
+          });
+        }
+      }
+    } else if (s.type === "dialogue") {
+      if (!s.lines || !s.choices || s.lines.length !== s.choices.length) errors.push("Scene " + s.n + ": dialogue line/choice mismatch");
+      else s.choices.forEach((opts, qi) => {
+        if (opts.filter(o => o.correct).length !== 1) errors.push("Scene " + s.n + ": gap " + (qi + 1) + " needs exactly one correct option");
+      });
+    } else {
+      errors.push("Scene " + s.n + ": unknown type " + s.type);
+    }
+  });
+  if (DATA.scenes.reduce((a, s) => a + s.points, 0) !== 55) errors.push("Corrected total is not 55");
+  const counts = {};
+  DATA.scenes.forEach(s => { counts[s.type] = (counts[s.type] || 0) + 1; });
+  if (counts.fill !== 2) errors.push("Expected 2 fill scenes, found " + counts.fill);
+  if (counts.matching + counts.matching_map !== 2) errors.push("Expected 2 matching scenes");
+  if (counts.short !== 5) errors.push("Expected 5 word-order scenes");
+  warnings.push("Map pins are geographic estimates and need human visual confirmation.");
+  warnings.push("The MP3 content was not machine-verified against the listening text.");
+  return { ok: errors.length === 0, errors, warnings, points: sum, counts };
+}
+
+function selfTest() {
+  const tests = [];
+  const check = (name, fn) => {
+    try { tests.push({ name, ok: !!fn() }); } catch (e) { tests.push({ name, ok: false, error: String(e) }); }
+  };
+  check("normalize ignores case and punctuation", () => normalizeSentence("  Mary   NEVER eats fish. ") === "mary never eats fish");
+  check("true/false correct scores full", () => {
+    const r = gradeScene(DATA.scenes[0], { value: "True" });
+    return r.perfect && r.correct === 1;
+  });
+  check("true/false wrong scores zero", () => {
+    const r = gradeScene(DATA.scenes[0], { value: "False" });
+    return r.correct === 0 && r.earned === 0;
+  });
+  check("Simple Present scene scores 6/6", () => {
+    const r = gradeScene(DATA.scenes[6], { values: DATA.scenes[6].answers.slice() });
+    return r.perfect && r.correct === 6;
+  });
+  check("partial fill is weighted", () => {
+    const r = gradeScene(DATA.scenes[6], { values: ["sleeps", "flows", "goes", "", "", ""] });
+    return r.correct === 3 && Math.abs(r.earned - 3) < 0.001;
+  });
+  check("word order scene accepts correct sentence", () => {
+    const r = gradeScene(DATA.scenes[11], { value: "my brother is always early for school" });
+    return r.perfect;
+  });
+  check("scene 13 corrected answer 'doing' gives 12/12", () => {
+    const r = gradeScene(DATA.scenes[12], { values: DATA.scenes[12].answers.slice() });
+    return r.perfect && r.total === 12;
+  });
+  check("scene 13 old split answer 'are doing' is caught", () => {
+    const vals = DATA.scenes[12].answers.slice();
+    vals[10] = "are doing";
+    const r = gradeScene(DATA.scenes[12], { values: vals });
+    return r.correct === 11;
+  });
+  check("scene 13 accepts US spelling 'traveling'", () => {
+    const vals = DATA.scenes[12].answers.slice();
+    vals[4] = "is traveling";
+    return gradeScene(DATA.scenes[12], { values: vals }).perfect;
+  });
+  check("map matching scores 6/6", () => {
+    const values = {};
+    DATA.scenes[5].items.forEach(item => { values[item.id] = DATA.scenes[5].answers[item.id]; });
+    return gradeScene(DATA.scenes[5], { values }).perfect;
+  });
+  check("subject matching scores 10/10", () => {
+    const values = {};
+    DATA.scenes[13].items.forEach(item => { values[item.id] = DATA.scenes[13].answers[item.id]; });
+    return gradeScene(DATA.scenes[13], { values }).perfect;
+  });
+  check("dialogue scene scores 8/8", () => {
+    return gradeScene(DATA.scenes[14], { values: [1, 1] }).perfect;
+  });
+  check("dialogue wrong choices score 0", () => {
+    return gradeScene(DATA.scenes[14], { values: [0, 0] }).earned === 0;
+  });
+  check("listening scores 5/5", () => {
+    return gradeScene(DATA.scenes[15], { values: DATA.scenes[15].answers.slice() }).perfect;
+  });
+  check("scene 11 accepts either name order", () => {
+    return gradeScene(DATA.scenes[10], { value: "Helen and Mary always go to the cinema together." }).perfect;
+  });
+  check("data validation passes", () => validateData().ok);
+  check("total points are 55", () => DATA.scenes.reduce((a, s) => a + s.points, 0) === 55);
+  const failed = tests.filter(t => !t.ok);
+  return { ok: failed.length === 0, passed: tests.length - failed.length, total: tests.length, failed, tests };
+}
+
+function init() {
+  load();
+  if (!state.drafts) state.drafts = {};
+  if (!state.plays) state.plays = {};
+  if (!state.hintShown) state.hintShown = {};
+  if (!state.badges) state.badges = new Set();
+
+  const printQuery = initPrintQuery();
+  if (printQuery) {
+    window.__mq = {
+      version: "1.0.0",
+      data: DATA,
+      validate: validateData,
+      selfTest,
+      state: () => JSON.parse(JSON.stringify({ results: state.results, xp: state.xp, totalXp: state.totalXp, finished: state.finished }))
+    };
+    return;
+  }
+
+  els.startBtn.addEventListener("click", () => startRun(hasProgress()));
+  els.resumeBtn.addEventListener("click", () => startRun(false));
+  els.brandBtn.addEventListener("click", () => {
+    if (!els.screenIntro.hidden) { window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+    stopTimer();
+    save();
+    showScreen("intro");
+    renderIntro();
+  });
+  els.checkBtn.addEventListener("click", checkAnswer);
+  els.nextBtn.addEventListener("click", nextScene);
+  els.hintBtn.addEventListener("click", () => {
+    const scene = DATA.scenes[state.sceneIndex];
+    state.hintShown[scene.n] = true;
+    renderHint(scene, !!state.results[scene.n]);
+    toast("Clue revealed", "No points lost — use it well.", "💡");
+    save();
+  });
+  els.printTopBtn.addEventListener("click", () => openPrint("worksheet"));
+  els.printWorksheetBtn.addEventListener("click", () => openPrint("worksheet"));
+  els.printKeyBtn.addEventListener("click", () => openPrint("key"));
+  els.printWorksheetBtn2.addEventListener("click", () => openPrint("worksheet"));
+  els.printKeyBtn2.addEventListener("click", () => openPrint("key"));
+  els.printFooterBtn.addEventListener("click", () => openPrint("worksheet"));
+  els.printKeyFooterBtn.addEventListener("click", () => openPrint("key"));
+  els.resetTopBtn.addEventListener("click", resetAll);
+  els.resetFooterBtn.addEventListener("click", resetAll);
+  els.playAgainBtn.addEventListener("click", () => { resetRun(); startRun(false); });
+
+  document.addEventListener("visibilitychange", () => {
+    if (els.screenQuiz.hidden || state.finished) return;
+    if (document.hidden) { stopTimer(); save(); }
+    else startTimer();
+  });
+  window.addEventListener("beforeunload", () => { stopTimer(); save(); });
+  window.addEventListener("resize", () => {
+    if (confettiParticles.length) resizeConfetti();
+  });
+
+  renderIntro();
+  updateHUD();
+  window.scrollTo(0, 0);
+
+  window.__mq = {
+    version: "1.0.0",
+    data: DATA,
+    validate: validateData,
+    selfTest,
+    state: () => JSON.parse(JSON.stringify({
+      sceneIndex: state.sceneIndex,
+      results: state.results,
+      drafts: state.drafts,
+      plays: state.plays,
+      streak: state.streak,
+      bestStreak: state.bestStreak,
+      xp: state.xp,
+      totalXp: state.totalXp,
+      level: state.level,
+      totalMs: state.totalMs,
+      finished: state.finished,
+      bestPct: state.bestPct,
+      badges: Array.from(state.badges)
+    })),
+    grade: (sceneIndex, given) => gradeScene(DATA.scenes[sceneIndex], given),
+    reset: () => {
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
+      state.bestPct = 0;
+      resetRun();
+      save();
+      showScreen("intro");
+      renderIntro();
+    },
+    print: openPrint,
+    buildPrint
+  };
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
+
+
+})();
+
+</script>
+</body>
+</html>
